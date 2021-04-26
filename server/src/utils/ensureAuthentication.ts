@@ -7,7 +7,7 @@ const ensureAuthentication: express.Handler = async (req, res, next) => {
   if (req.headers.authorization) {
     try {
       const jwtDecoded = decodeJwt(req.headers.authorization.replace(/Bearer /, '')) as { aud: string };
-      const user = await db.users.findFirst({ where: { id: jwtDecoded.aud } });
+      const user = await db.users.findUnique({ where: { id: jwtDecoded.aud } });
       if (!user) throw new createHttpError.Unauthorized('User not found. Please re-login.');
 
       req.user = user;

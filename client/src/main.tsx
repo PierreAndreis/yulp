@@ -9,15 +9,15 @@ import { AuthProvider } from './services/Auth';
 
 ReactDOM.render(
   <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ChakraProvider>
-          <BrowserRouter>
+    <BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
+          <ChakraProvider>
             <App />
-          </BrowserRouter>
-        </ChakraProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+          </ChakraProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root'),
 );

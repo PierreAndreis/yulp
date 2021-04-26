@@ -1,11 +1,11 @@
+import { Role } from '.prisma/client';
 import bcryptjs from 'bcryptjs';
 import { celebrate, Joi, Segments } from 'celebrate';
 import express from 'express';
-import { signJwt } from './../jwt';
-import db from './../db';
-import ensureAuthentication from '../utils/ensureAuthentication';
-import { STATUS_CODES } from 'http';
 import createHttpError from 'http-errors';
+import ensureAuthentication from '../utils/ensureAuthentication';
+import db from './../db';
+import { signJwt } from './../jwt';
 
 const routers = express.Router();
 
@@ -16,8 +16,8 @@ routers.get('/me', ensureAuthentication, async (req, res) => {
     },
     select: {
       id: true,
+      name: true,
       email: true,
-      username: true,
       role: true,
     },
   });
@@ -29,7 +29,8 @@ routers.post(
   '/register',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      username: Joi.string().required().alphanum().min(3).max(30),
+      name: Joi.string().required().min(3).max(30),
+      role: Joi.required().allow(Role.USER, Role.OWNER),
       email: Joi.string().required().email({ minDomainSegments: 2 }).message('Email invalid'),
       password: Joi.string()
         .required()
@@ -38,45 +39,30 @@ routers.post(
     }),
   }),
   async (req, res) => {
-    const body: { username: string; email: string; password: string } = req.body;
+    const body: { name: string; role: Role; email: string; password: string } = req.body;
 
-    const countWithUsername = await db.users.count({
+    const users_with_same_email = await db.users.count({
       where: {
-        username: body.username,
+        email: body.email,
       },
     });
 
-    if (countWithUsername > 0) {
-      throw new createHttpError.Conflict('Username already in use.');
-    }
-
-    const countWithEmail = await db.users.count({
-      where: {
-        OR: [
-          {
-            email: body.email,
-          },
-          {
-            username: body.username,
-          },
-        ],
-      },
-    });
-
-    if (countWithEmail > 0) {
+    if (users_with_same_email > 0) {
       throw new createHttpError.Conflict('Email already in use.');
     }
 
     const hashedPassword = await bcryptjs.hash(body.password, 10);
     const user = await db.users.create({
       data: {
-        username: body.username,
+        name: body.name,
+        role: body.role,
         email: body.email,
         password: hashedPassword,
       },
       select: {
         id: true,
-        username: true,
+        name: true,
+        role: true,
         email: true,
       },
     });
@@ -92,14 +78,14 @@ routers.post(
   '/login',
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      username: Joi.string().required(),
+      email: Joi.string().required(),
       password: Joi.string().required(),
     }),
   }),
   async (req, res) => {
-    const body: { username: string; password: string } = req.body;
+    const body: { email: string; password: string } = req.body;
     const user = await db.users.findUnique({
-      where: { username: body.username },
+      where: { email: body.email },
     });
 
     const isCorrect = await bcryptjs.compare(body.password, user?.password ?? '');

@@ -19,8 +19,9 @@ enum Role {
 model Users {
   id          String        @id @default(uuid())
   email       String        @unique
-  username    String        @unique
+  name        String
   password    String
+  created_at  DateTime      @default(now())
   //
   role        Role          @default(USER)
   restaurants Restaurants[]
@@ -29,32 +30,32 @@ model Users {
 
 model Restaurants {
   id            String    @id @default(uuid())
+  name          String
   owner_user    Users     @relation(fields: [owner_user_id], references: [id])
   owner_user_id String
-  //
-  name          String
+  created_at    DateTime  @default(now())
   //
   reviews       Reviews[]
 }
 
 model Reviews {
-  id             String        @id @default(uuid())
-  message        String
-  rating         Int
-  visit_at       DateTime
-  user           Users         @relation(fields: [user_id], references: [id])
-  user_id        String
-  restaurant     Restaurants   @relation(fields: [restaurants_id], references: [id])
-  restaurants_id String
+  id            String        @id @default(uuid())
+  message       String
+  rating        Int
+  visit_at      DateTime
+  user          Users         @relation(fields: [user_id], references: [id])
+  user_id       String
+  restaurant    Restaurants   @relation(fields: [restaurant_id], references: [id])
+  restaurant_id String
   //
-  created_at     DateTime
-  reply          ReviewsReply?
+  created_at    DateTime      @default(now())
+  reply         ReviewsReply?
 }
 
 model ReviewsReply {
   id         String   @id @default(uuid())
-  review     Reviews  @relation(fields: [reviews_id], references: [id])
-  reviews_id String
+  review     Reviews  @relation(fields: [review_id], references: [id])
+  review_id  String
   message    String
-  created_at DateTime
+  created_at DateTime @default(now())
 }

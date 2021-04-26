@@ -3,17 +3,20 @@ import React from 'react';
 import { FaChevronLeft, FaExclamationTriangle } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
+import { Link } from 'react-router-dom';
 import { Card } from '../../components/Card';
+import Layout from '../../components/Layout';
+import { useAuth } from '../../services/Auth';
 import { isError } from '../../services/fetch';
+import ReviewsCreateModal from '../reviews/ReviewCreateModal';
+import ReviewsCard from '../reviews/ReviewsCard';
 import ReviewsStars from '../reviews/ReviewsStars';
 import * as api from './../../services/api';
-import Layout from '../../components/Layout';
-import { Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup } from '@chakra-ui/react';
-import ReviewsCard from '../reviews/ReviewsCard';
-import { Link } from 'react-router-dom';
 
 const RestaurantsDetailsPage = () => {
   const { id } = useParams<{ id: string }>();
+
+  const { user } = useAuth();
 
   const { data, error, status } = useQuery(`restaurants.${id}`, () => api.restaurantsDetails(id));
 
@@ -60,13 +63,17 @@ const RestaurantsDetailsPage = () => {
 
   const highest_rated_review = data.reviews.reduce<typeof data.reviews[0] | null>((highestReview, review) => {
     if (!highestReview) return review;
-    return Math.max(highestReview.rating, review.rating) ? review : highestReview;
+    return review.rating > highestReview.rating ? review : highestReview;
   }, null);
 
   const lowest_rated_review = data.reviews.reduce<typeof data.reviews[0] | null>((lowestReview, review) => {
     if (!lowestReview) return review;
-    return Math.min(lowestReview.rating, review.rating) ? review : lowestReview;
+    return review.rating < lowestReview.rating ? review : lowestReview;
   }, null);
+
+  const has_user_reviewed = data.reviews.find((review) => review.user.id === user.id);
+
+  const is_restaurant_owner = data.owner_user_id === user.id;
 
   return (
     <Layout>
@@ -79,9 +86,13 @@ const RestaurantsDetailsPage = () => {
           </Link>
           <Stack direction="row" justify="space-between" align="center" w="100%">
             <Heading>{data.name}</Heading>
-            <Button colorScheme="blue" size="md">
-              Leave a review
-            </Button>
+            {!has_user_reviewed && !is_restaurant_owner && (
+              <ReviewsCreateModal restaurantId={data.id}>
+                <Button colorScheme="blue" size="md">
+                  Leave a review
+                </Button>
+              </ReviewsCreateModal>
+            )}
           </Stack>
           <Stack direction="row" align="center">
             <ReviewsStars value={average_review} fontSize="lg" />
@@ -96,7 +107,7 @@ const RestaurantsDetailsPage = () => {
               <Stack>
                 <Text fontWeight="bold">Highest Rated Review</Text>
 
-                <ReviewsCard item={highest_rated_review} />
+                <ReviewsCard item={highest_rated_review} canReply={is_restaurant_owner} />
               </Stack>
             </GridItem>
           )}
@@ -105,20 +116,20 @@ const RestaurantsDetailsPage = () => {
               <Stack>
                 <Text fontWeight="bold">Lowest Rated Review</Text>
 
-                <ReviewsCard item={lowest_rated_review} />
+                <ReviewsCard item={lowest_rated_review} canReply={is_restaurant_owner} />
               </Stack>
             </GridItem>
           )}
         </SimpleGrid>
         <Text fontWeight="bold">Latest Reviews</Text>
         {data.reviews.length > 0 ? (
-          <SimpleGrid minChildWidth={120}>
-            {data.reviews.map((review) => (
-              <ReviewsCard key={review.id} item={review} />
-            ))}
-          </SimpleGrid>
+          data.reviews.map((review) => (
+            <ReviewsCard key={review.id} item={review} canReply={is_restaurant_owner} showReply />
+          ))
         ) : (
-          <Text color="gray.700">This restaurant has no reviews yet. Be the first one!</Text>
+          <Text color="gray.700">
+            This restaurant has no reviews yet. {user.role === 'USER' && 'Be the first one!'}
+          </Text>
         )}
       </Stack>
     </Layout>

@@ -1,4 +1,17 @@
-import { Box, Button, chakra, FormControl, FormLabel, Heading, Input, Stack, Text, useToast } from '@chakra-ui/react';
+import {
+  Box,
+  Button,
+  chakra,
+  FormControl,
+  FormLabel,
+  Heading,
+  Input,
+  Select,
+  Stack,
+  Text,
+  useToast,
+} from '@chakra-ui/react';
+import { Role } from '@prisma/client';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router';
@@ -8,7 +21,6 @@ import { Logo } from '../components/Logo';
 import { PasswordField } from '../components/PasswordField';
 import * as api from '../services/api';
 import { useTokenStorage } from '../services/Auth';
-import { isError } from '../services/fetch';
 
 const SignupPage = () => {
   const setToken = useTokenStorage((state) => state.setToken);
@@ -21,23 +33,11 @@ const SignupPage = () => {
       setToken(data.token);
       history.push('/');
     },
-    onError: (error) => {
-      if (isError(error)) {
-        toast({
-          status: 'error',
-          title: error.message,
-        });
-        return;
-      }
-
-      toast({
-        status: 'error',
-        title: 'Unknown Error. Please try again later.',
-      });
-    },
   });
 
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+
+  const [role, setRole] = useState<Role>(Role.USER);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
@@ -54,18 +54,18 @@ const SignupPage = () => {
         <chakra.form
           onSubmit={(e) => {
             e.preventDefault();
-            register({ username, password, email });
+            register({ name, password, email, role });
           }}
         >
           <Stack spacing="6">
-            <FormControl id="username">
-              <FormLabel>Username</FormLabel>
+            <FormControl id="name">
+              <FormLabel>Name</FormLabel>
               <Input
-                name="username"
+                name="name"
                 type="text"
-                autoComplete="username"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
+                autoComplete="name"
+                onChange={(e) => setName(e.target.value)}
+                value={name}
                 required
               />
             </FormControl>
@@ -86,6 +86,14 @@ const SignupPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               value={password}
             />
+
+            <FormControl id="email">
+              <FormLabel>Role</FormLabel>
+              <Select value={role} onChange={(e) => setRole(e.target.value as Role)}>
+                <option value={Role.OWNER}>Restaurant Owner</option>
+                <option value={Role.USER}>Customer</option>
+              </Select>
+            </FormControl>
 
             <Button type="submit" colorScheme="blue" size="lg" fontSize="md" isLoading={status === 'loading'}>
               Create account

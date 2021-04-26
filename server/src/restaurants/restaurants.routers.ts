@@ -1,4 +1,4 @@
-import { Restaurants, Role } from '@prisma/client';
+import { Prisma, Restaurants, Role } from '@prisma/client';
 import { celebrate, Joi, Segments } from 'celebrate';
 import express from 'express';
 import createHttpError from 'http-errors';
@@ -14,6 +14,7 @@ routers.get('/restaurants/:id', ensureAuthentication, async (req, res) => {
     select: {
       id: true,
       name: true,
+      owner_user_id: true,
       reviews: {
         select: {
           id: true,
@@ -31,9 +32,12 @@ routers.get('/restaurants/:id', ensureAuthentication, async (req, res) => {
           user: {
             select: {
               id: true,
-              username: true,
+              name: true,
             },
           },
+        },
+        orderBy: {
+          created_at: 'desc',
         },
       },
     },
@@ -46,7 +50,9 @@ routers.get('/restaurants/:id', ensureAuthentication, async (req, res) => {
   res.json(restaurant);
 });
 
-routers.get('/restaurants', ensureAuthentication, async (_, res) => {
+routers.get('/restaurants', ensureAuthentication, async (req, res) => {
+  const isOwner = req.user?.role === 'OWNER';
+
   const restaurants: Array<
     Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }
   > = await db.$queryRaw`
@@ -56,7 +62,8 @@ routers.get('/restaurants', ensureAuthentication, async (_, res) => {
       COALESCE(AVG(review.rating), 0) as reviews_rating_avg,
       COALESCE(COUNT(review.id), 0) as reviews_rating_count
   FROM public."Restaurants" r
-  LEFT JOIN public."Reviews" review on review.restaurants_id = r.id
+  LEFT JOIN public."Reviews" review on review.restaurant_id = r.id
+  ${isOwner ? Prisma.sql`WHERE owner_user_id = ${req.user?.id}` : Prisma.empty}
   GROUP BY r.id
   ORDER BY reviews_rating_avg DESC`;
 

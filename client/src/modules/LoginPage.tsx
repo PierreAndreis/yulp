@@ -18,23 +18,9 @@ const LoginPage = () => {
       toast.closeAll();
       setToken(data.token);
     },
-    onError: (error) => {
-      if (isError(error)) {
-        toast({
-          status: 'error',
-          title: error.message,
-        });
-        return;
-      }
-
-      toast({
-        status: 'error',
-        title: 'Unknown Error. Please try again later.',
-      });
-    },
   });
 
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
     <Box maxW="md" mx="auto" pt={10}>
@@ -50,18 +36,18 @@ const LoginPage = () => {
         <chakra.form
           onSubmit={(e) => {
             e.preventDefault();
-            login({ username, password });
+            login({ email, password });
           }}
         >
           <Stack spacing="6">
             <FormControl id="email">
-              <FormLabel>Username</FormLabel>
+              <FormLabel>Email</FormLabel>
               <Input
-                name="username"
-                type="text"
-                autoComplete="username"
-                onChange={(e) => setUsername(e.target.value)}
-                value={username}
+                name="email"
+                type="email"
+                autoComplete="email"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
                 required
               />
             </FormControl>

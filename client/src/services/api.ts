@@ -1,17 +1,17 @@
-import { Role, Restaurants, Reviews, ReviewsReply, Users } from '@prisma/client';
+import { Restaurants, Reviews, ReviewsReply, Users, Role } from '@prisma/client';
 import authorizedRequest, { parse } from './fetch';
 
 const BASE_URL = 'http://localhost:1234';
 
-type User = Pick<Users, 'id' | 'email' | 'username' | 'role'>;
+type User = Pick<Users, 'id' | 'name' | 'email' | 'role'>;
 
-export type Review = Pick<Reviews, 'id' | 'message' | 'created_at' | 'visit_at' | 'rating'> & {
+export type Review = Pick<Reviews, 'id' | 'message' | 'created_at' | 'visit_at' | 'rating' | 'restaurant_id'> & {
   reply: Pick<ReviewsReply, 'id' | 'message' | 'created_at'> | null;
-  user: Pick<Users, 'id' | 'username'>;
+  user: Pick<Users, 'id' | 'name'>;
 };
 
 type LoginData = {
-  username: string;
+  email: string;
   password: string;
 };
 
@@ -27,9 +27,10 @@ export async function login(data: LoginData): Promise<LoginResponse> {
 }
 
 type RegisterData = {
-  username: string;
+  name: string;
   password: string;
   email: string;
+  role: Role;
 };
 
 type RegisterResponse = {
@@ -60,9 +61,50 @@ export async function restaurants(): Promise<RestaurantsResponse> {
   return authorizedRequest(BASE_URL + '/restaurants').then(parse);
 }
 
-export type RestaurantsDetailsResponse = Pick<Restaurants, 'id' | 'name'> & {
+export type RestaurantsDetailsResponse = Pick<Restaurants, 'id' | 'name' | 'owner_user_id'> & {
   reviews: Array<Review>;
 };
 export async function restaurantsDetails(id: string): Promise<RestaurantsDetailsResponse> {
   return authorizedRequest(`${BASE_URL}/restaurants/${id}`).then(parse);
+}
+
+export type CreateRestaurantData = {
+  name: string;
+};
+
+type CreateRestaurantResponse = Pick<Restaurants, 'id' | 'name' | 'created_at'>;
+
+export async function createRestaurant(data: CreateRestaurantData): Promise<CreateRestaurantResponse> {
+  return authorizedRequest(BASE_URL + '/restaurants', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(parse);
+}
+
+type ReviewCreateData = {
+  message: string;
+  rating: number;
+  visit_at: string;
+};
+
+type ReviewCreateResponse = Review;
+
+export async function createReview(id: string, data: ReviewCreateData): Promise<ReviewCreateResponse> {
+  return authorizedRequest(`${BASE_URL}/restaurants/${id}/reviews`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(parse);
+}
+
+type ReviewReplyData = {
+  message: string;
+};
+
+type ReviewReplyResponse = Review;
+
+export async function replyReview(reviewId: string, data: ReviewReplyData): Promise<ReviewReplyResponse> {
+  return authorizedRequest(`${BASE_URL}/reviews/${reviewId}/reply`, {
+    method: 'POST',
+    body: JSON.stringify(data),
+  }).then(parse);
 }
