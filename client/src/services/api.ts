@@ -5,8 +5,9 @@ const BASE_URL = 'http://localhost:1234';
 
 type User = Pick<Users, 'id' | 'name' | 'email' | 'role'>;
 
-export type Review = Pick<Reviews, 'id' | 'message' | 'created_at' | 'visit_at' | 'rating' | 'restaurant_id'> & {
+export type Review = Pick<Reviews, 'id' | 'message' | 'created_at' | 'rating' | 'restaurant_id'> & {
   reply: Pick<ReviewsReply, 'id' | 'message' | 'created_at'> | null;
+  visit_at: string;
   user: Pick<Users, 'id' | 'name'>;
 };
 

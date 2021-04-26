@@ -34,12 +34,12 @@ const ReviewsCreateModal = (props: Props) => {
   const initialRef = React.useRef<HTMLTextAreaElement>(null);
 
   const [message, setMessage] = useState('');
-  const [visit_at, setVisitAt] = useState('');
+  const [visit_at, setVisitAt] = useState<Date>(() => new Date());
   const [rating, setRating] = useState(5);
 
   function onClose() {
     setMessage('');
-    setVisitAt('');
+    setVisitAt(new Date());
     setRating(5);
     onCloseModal();
   }
@@ -63,7 +63,7 @@ const ReviewsCreateModal = (props: Props) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              sendReview({ message, rating, visit_at });
+              sendReview({ message, rating, visit_at: visit_at.toISOString() });
             }}
           >
             <ModalHeader>Leave a Review</ModalHeader>
@@ -92,8 +92,8 @@ const ReviewsCreateModal = (props: Props) => {
                     type="date"
                     required
                     placeholder=""
-                    value={visit_at}
-                    onChange={(e) => setVisitAt(e.target.value)}
+                    value={visit_at?.toISOString().split('T')[0]}
+                    onChange={(e) => setVisitAt(e.target.valueAsDate || new Date(e.target.value))}
                   />
                 </FormControl>
               </Stack>

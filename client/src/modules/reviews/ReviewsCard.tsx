@@ -37,7 +37,7 @@ const ReviewsCard = (props: Props) => {
             </Text>
           </Stack>
           <Text fontSize="sm" color="gray.500">
-            Visited on {new Date(props.item.visit_at).toLocaleDateString('en-US')}
+            Visited on {new Date(props.item.visit_at).toISOString().split('T')[0]}
           </Text>
         </Stack>
       </Stack>
@@ -48,7 +48,7 @@ const ReviewsCard = (props: Props) => {
             {props.item.reply?.message}
           </Text>
           <Text fontSize="sm" color="gray.500">
-            Answered by the owner on {new Date(props.item.reply?.created_at).toLocaleDateString('en-US')}
+            Answered by the owner on {new Date(props.item.created_at).toISOString().split('T')[0]}
           </Text>
         </Stack>
       )}
