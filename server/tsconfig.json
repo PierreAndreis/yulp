@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "sourceMap": true,
+    "outDir": "dist",
+    "strict": true,
+    "lib": ["esnext"],
+    "esModuleInterop": true,
+    "typeRoots": [
+      "@types", // custom merged types must be first in a list
+      "node_modules/@types"
+    ]
+  },
+  "include": ["src"]
+}

@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  OWNER
+  USER
+}
+
+model Users {
+  id          String        @id @default(uuid())
+  email       String        @unique
+  username    String        @unique
+  password    String
+  //
+  role        Role          @default(USER)
+  restaurants Restaurants[]
+  reviews     Reviews[]
+}
+
+model Restaurants {
+  id            String    @id @default(uuid())
+  owner_user    Users     @relation(fields: [owner_user_id], references: [id])
+  owner_user_id String
+  //
+  name          String
+  //
+  reviews       Reviews[]
+}
+
+model Reviews {
+  id             String        @id @default(uuid())
+  message        String
+  rating         Int
+  visit_at       DateTime
+  user           Users         @relation(fields: [user_id], references: [id])
+  user_id        String
+  restaurant     Restaurants   @relation(fields: [restaurants_id], references: [id])
+  restaurants_id String
+  //
+  created_at     DateTime
+  reply          ReviewsReply?
+}
+
+model ReviewsReply {
+  id         String   @id @default(uuid())
+  review     Reviews  @relation(fields: [reviews_id], references: [id])
+  reviews_id String
+  message    String
+  created_at DateTime
+}
