@@ -38,28 +38,32 @@ const ReviewReply = (props: Props) => {
     <>
       <chakra.div {...getButtonProps()}>{props.children}</chakra.div>
       <Collapse in={isOpen} animateOpacity>
-        <Box p={5}>
+        <chakra.form
+          p={5}
+          onSubmit={(e) => {
+            e.preventDefault();
+            sendReview({ message });
+          }}
+        >
           <FormControl isRequired>
             <FormLabel>Message</FormLabel>
             <Textarea
               ref={initialRef}
               placeholder="Your reply..."
               value={message}
+              isRequired
               onChange={(e) => setMessage(e.target.value)}
             />
           </FormControl>
           <ButtonGroup size="sm">
-            <Button
-              colorScheme="blue"
-              type="submit"
-              onClick={() => sendReview({ message })}
-              isLoading={status === 'loading'}
-            >
+            <Button colorScheme="blue" type="submit" isLoading={status === 'loading'}>
               Reply
             </Button>
-            <Button onClick={onClose}>Cancel</Button>
+            <Button onClick={onClose} type="reset">
+              Cancel
+            </Button>
           </ButtonGroup>
-        </Box>
+        </chakra.form>
       </Collapse>
     </>
   );

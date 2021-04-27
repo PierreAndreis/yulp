@@ -7,7 +7,7 @@ export default function Layout(props: { children: React.ReactNode; header?: Reac
     <Box bg={useColorModeValue('gray.50', 'inherit')} minH="100vh">
       {props.header}
 
-      <Box maxW="4xl" mx="auto" pt={props.header ? 5 : 0}>
+      <Box maxW="4xl" mx="auto" pt={props.header ? 5 : 0} pb={5}>
         {props.children}
       </Box>
     </Box>

@@ -56,13 +56,11 @@ const RestaurantsDetailsPage = () => {
 
   const average_review =
     amount_of_reviews > 0
-      ? Number(
-          (
-            data.reviews.reduce((sum, review) => {
-              return sum + review.rating;
-            }, 0) / amount_of_reviews
-          ).toFixed(1),
-        )
+      ? (
+          data.reviews.reduce((sum, review) => {
+            return sum + review.rating;
+          }, 0) / amount_of_reviews
+        ).toFixed(1)
       : 0;
 
   const highest_rated_review = data.reviews.reduce<typeof data.reviews[0] | null>((highestReview, review) => {
@@ -98,7 +96,7 @@ const RestaurantsDetailsPage = () => {
             )}
           </Stack>
           <Stack direction="row" align="center">
-            <ReviewsStars value={average_review} fontSize="lg" />
+            <ReviewsStars value={Number(average_review)} fontSize="lg" />
             <Text color="gray.600" fontSize="lg">
               {average_review} · {amount_of_reviews} review{amount_of_reviews !== 1 && 's'}
             </Text>

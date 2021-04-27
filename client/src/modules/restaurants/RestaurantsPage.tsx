@@ -78,6 +78,10 @@ const RestaurantsPage = () => {
                 <Text fontWeight="bold">{item.name}</Text>
                 <Stack direction="row" align="center">
                   <ReviewsStars value={item.reviews_rating_avg} fontSize="sm" />
+
+                  <Text color="gray.600" fontSize="sm">
+                    {item.reviews_rating_avg.toFixed(1)} ·
+                  </Text>
                   <Text color="gray.600" fontSize="sm">
                     {item.reviews_rating_count} review{item.reviews_rating_count !== 1 && 's'}
                   </Text>
