@@ -73,6 +73,36 @@ routers.post(
   },
 );
 
+routers.get(
+  '/reviews',
+  ensureAuthentication,
+  ensureRole('OWNER'),
+  celebrate({
+    [Segments.QUERY]: Joi.object().keys({
+      filter: Joi.allow('NO_REPLY'),
+    }),
+  }),
+  async (req, res) => {
+    const filter = req.query.filter;
+    const user = req.user as NonNullable<typeof req.user>;
+
+    const reviews = await db.reviews.findMany({
+      where: {
+        restaurant: {
+          owner_user_id: user.id,
+        },
+        ...(filter === 'NO_REPLY' ? { reply: null } : {}),
+      },
+      select: REVIEW_SELECT,
+      orderBy: {
+        created_at: 'desc',
+      },
+    });
+
+    res.status(200).json({ reviews });
+  },
+);
+
 routers.post(
   '/reviews/:id/reply',
   ensureAuthentication,

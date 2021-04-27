@@ -56,9 +56,13 @@ const RestaurantsDetailsPage = () => {
 
   const average_review =
     amount_of_reviews > 0
-      ? data.reviews.reduce((sum, review) => {
-          return sum + review.rating;
-        }, 0) / amount_of_reviews
+      ? Number(
+          (
+            data.reviews.reduce((sum, review) => {
+              return sum + review.rating;
+            }, 0) / amount_of_reviews
+          ).toFixed(1),
+        )
       : 0;
 
   const highest_rated_review = data.reviews.reduce<typeof data.reviews[0] | null>((highestReview, review) => {
@@ -72,7 +76,6 @@ const RestaurantsDetailsPage = () => {
   }, null);
 
   const has_user_reviewed = data.reviews.find((review) => review.user.id === user.id);
-
   const is_restaurant_owner = data.owner_user_id === user.id;
 
   return (

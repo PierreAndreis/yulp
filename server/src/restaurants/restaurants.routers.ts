@@ -47,28 +47,45 @@ routers.get('/restaurants/:id', ensureAuthentication, async (req, res) => {
     throw new createHttpError.NotFound('Restaurant not found.');
   }
 
-  res.json(restaurant);
+  res.status(200).json(restaurant);
 });
 
-routers.get('/restaurants', ensureAuthentication, async (req, res) => {
-  const isOwner = req.user?.role === 'OWNER';
+routers.get(
+  '/restaurants',
+  ensureAuthentication,
+  celebrate({
+    [Segments.QUERY]: Joi.object().keys({
+      ratingLeast: Joi.number().min(0).max(5),
+    }),
+  }),
+  async (req, res) => {
+    const isOwner = req.user?.role === 'OWNER';
 
-  const restaurants: Array<
-    Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }
-  > = await db.$queryRaw`
+    const ratingLeast = req.query.ratingLeast;
+
+    const restaurants: Array<
+      Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }
+    > = await db.$queryRaw`
     SELECT 
       r.id as id,
       r.name as name, 
       COALESCE(AVG(review.rating), 0) as reviews_rating_avg,
       COALESCE(COUNT(review.id), 0) as reviews_rating_count
-  FROM public."Restaurants" r
-  LEFT JOIN public."Reviews" review on review.restaurant_id = r.id
-  ${isOwner ? Prisma.sql`WHERE owner_user_id = ${req.user?.id}` : Prisma.empty}
-  GROUP BY r.id
-  ORDER BY reviews_rating_avg DESC`;
+      FROM public."Restaurants" r
+        LEFT JOIN public."Reviews" review on review.restaurant_id = r.id
+      WHERE 1 = 1
+      ${isOwner ? Prisma.sql`AND owner_user_id = ${req.user?.id}` : Prisma.empty}
+      GROUP BY r.id
+      ${
+        typeof ratingLeast !== 'undefined'
+          ? Prisma.sql`HAVING COALESCE(AVG(review.rating), 0) >= ${ratingLeast}`
+          : Prisma.empty
+      }
+      ORDER BY reviews_rating_avg DESC`;
 
-  res.json({ restaurants });
-});
+    res.json({ restaurants });
+  },
+);
 
 routers.post(
   '/restaurants',

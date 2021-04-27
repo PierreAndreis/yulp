@@ -8,7 +8,7 @@ import { useAuth } from '../services/Auth';
 import { Logo } from './Logo';
 
 export default function Navbar() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   return (
     <Box bg={'blue.400'} h="50px" position="relative">
       <Box maxW="4xl" mx="auto" h="100%">
@@ -27,6 +27,18 @@ export default function Navbar() {
             >
               Restaurants
             </Button>
+            {user.role === 'OWNER' ? (
+              <Button
+                as={Link}
+                to={'/reviews-pending'}
+                bg="transparent"
+                color="white"
+                _hover={{ bg: 'blue.300' }}
+                leftIcon={<BiFoodMenu />}
+              >
+                Reviews Pending
+              </Button>
+            ) : null}
           </ButtonGroup>
           <IconButton
             style={{ marginLeft: 'auto' }}

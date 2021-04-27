@@ -8,6 +8,7 @@ import RestaurantsDetailsPage from './modules/restaurants/RestaurantsDetailsPage
 import SignupPage from './modules/SignupPage';
 import { useAuth } from './services/Auth';
 import Navbar from './components/Navbar';
+import ReviewsPendingPage from './modules/reviews/ReviewsPendingPage';
 
 function App() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -38,6 +39,9 @@ function App() {
       <Switch>
         <Route path="/restaurants/:id">
           <RestaurantsDetailsPage />
+        </Route>
+        <Route path="/reviews-pending">
+          <ReviewsPendingPage />
         </Route>
         <Route path="/">
           <RestaurantsPage />

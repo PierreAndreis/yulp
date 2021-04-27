@@ -1,5 +1,6 @@
 import { Restaurants, Reviews, ReviewsReply, Users, Role } from '@prisma/client';
 import authorizedRequest, { parse } from './fetch';
+import qs from "query-string";
 
 const BASE_URL = 'http://localhost:1234';
 
@@ -58,8 +59,12 @@ type RestaurantsResponse = {
   restaurants: Array<Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }>;
 };
 
-export async function restaurants(): Promise<RestaurantsResponse> {
-  return authorizedRequest(BASE_URL + '/restaurants').then(parse);
+type RestaurantsQueries = {
+  ratingLeast?: number;
+};
+
+export async function restaurants(params: RestaurantsQueries): Promise<RestaurantsResponse> {
+  return authorizedRequest(`${BASE_URL}/restaurants?${qs.stringify(params)}`).then(parse);
 }
 
 export type RestaurantsDetailsResponse = Pick<Restaurants, 'id' | 'name' | 'owner_user_id'> & {
@@ -80,6 +85,14 @@ export async function createRestaurant(data: CreateRestaurantData): Promise<Crea
     method: 'POST',
     body: JSON.stringify(data),
   }).then(parse);
+}
+
+type PendingReviewsReply = {
+  reviews: Array<Review>;
+};
+
+export async function pendingReviews(): Promise<PendingReviewsReply> {
+  return authorizedRequest(BASE_URL + '/reviews?filter=NO_REPLY').then(parse);
 }
 
 type ReviewCreateData = {

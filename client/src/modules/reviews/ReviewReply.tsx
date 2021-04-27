@@ -26,7 +26,9 @@ const ReviewReply = (props: Props) => {
     (data: Parameters<typeof api.replyReview>[1]) => api.replyReview(props.reviewId, data),
     {
       onSuccess: (data) => {
+        queryClient.refetchQueries({ queryKey: `restaurants` });
         queryClient.refetchQueries({ queryKey: `restaurants.${data.restaurant_id}` });
+        queryClient.refetchQueries({ queryKey: `reviews_pending` });
         onClose();
       },
     },
