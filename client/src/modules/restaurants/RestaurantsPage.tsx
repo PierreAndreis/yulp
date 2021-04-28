@@ -38,7 +38,7 @@ const RestaurantsPage = () => {
     ['reviews', 'reviews.pending'],
     () => api.reviews({ replied: false, showOnlyOwned: true }),
     {
-      enabled: user?.role === 'OWNER',
+      enabled: user?.role !== 'USER',
     },
   );
 

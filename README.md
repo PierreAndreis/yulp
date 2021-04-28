@@ -2,6 +2,8 @@
 
 A full stack restaurant review application built using modern web practices.
 
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Restaurant%20Review%20API&uri=https%3A%2F%2Fgit.toptal.com%2Fscreening%2FPierre-Ortega%2F-%2Fblob%2Fmain%2Finsomnia-schema.json)
+
 ## Features
 
 - Ability to login and register as an user or restaurant owner
@@ -34,7 +36,7 @@ This command will start up a postgres database in the local port `5432` using th
 <details><summary>Migrate and seed the database</summary>
 <p>
 
-First run `yarn db:migrate`. Once that is complete, you can run `yarn db:seed` to seed your database.
+First run `yarn db:deploy`. Once that is complete, you can run `yarn db:seed` to seed your database.
 
 These commands will run the migrations on your database and create a initial admin account.
 
@@ -62,6 +64,23 @@ To run the server application, `yarn start` will start in production mode after 
 </details>
 
 <br />
+
+## Available Scripts
+
+`start` Start the production built API server. Requires build first<br />
+`build` Build both client and server <br />
+`docs` Start a documentation app for the API on port 9999<br />
+`serve` Start a local server to serve the static assets generated from the client build<br />
+`dev` Run both client and server locally, watching changes and reloading<br />
+
+## Database Scripts
+
+`db:seed` Seed your database <br />
+`db:reset` Reset your database and reapply migrations <br />
+`db:db` Compare your schema with the database and create migrations based on changes <br />
+`db:deploy` Deploy your migrations <br />
+`db:generate` Generate Prisma typings <br />
+`db:studio` Initiate [Prisma Studio](https://www.prisma.io/studio) <br />
 
 ## Technology used
 

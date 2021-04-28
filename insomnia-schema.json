@@ -1,0 +1,689 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2021-04-28T17:53:23.832Z",
+  "__export_source": "insomnia.desktop.app:v2021.2.2",
+  "resources": [
+    {
+      "_id": "req_4a7131d0818a4b63a5de65fb4ca8faa7",
+      "parentId": "fld_7d7e8f1ae95e4ca498c43caf507b128b",
+      "modified": 1619627480710,
+      "created": 1619627237059,
+      "url": "{{endpoint}}/me",
+      "name": "Me",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376152431,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_7d7e8f1ae95e4ca498c43caf507b128b",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619627228265,
+      "created": 1619627228265,
+      "name": "Auth",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1619627228265,
+      "_type": "request_group"
+    },
+    {
+      "_id": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "parentId": null,
+      "modified": 1619376081817,
+      "created": 1619376081817,
+      "name": "toptal-exercise",
+      "description": "",
+      "scope": "design",
+      "_type": "workspace"
+    },
+    {
+      "_id": "req_0818731eb960469e92b15284dc424997",
+      "parentId": "fld_7d7e8f1ae95e4ca498c43caf507b128b",
+      "modified": 1619627505518,
+      "created": 1619376143579,
+      "url": "{{endpoint}}/login",
+      "name": "Login",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"email\": \"admin@admin.com\",\n\t\"password\": \"admin\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json", "id": "pair_1987b737c570468eadf6ce672fd6accc" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1619376152381,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_d8805710f7d64ee08c34317ef04ab611",
+      "parentId": "fld_7d7e8f1ae95e4ca498c43caf507b128b",
+      "modified": 1619632389656,
+      "created": 1619376152331,
+      "url": "{{endpoint}}/register",
+      "name": "Sign up",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"username\": \"\",\n\t\"email\": \"\",\n\t\"password\": \"\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json", "id": "pair_cd180ea9dbff47dfb7a48f24848802bc" }
+      ],
+      "authentication": {},
+      "metaSortKey": -1619376152331,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_07dd93db189a47a782b4f6b15d171c3f",
+      "parentId": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "modified": 1619628975625,
+      "created": 1619376650795,
+      "url": "{{endpoint}}/restaurants",
+      "name": "List Restaurants",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        { "name": "ratingLeast", "value": "0", "description": "", "id": "pair_924fd8334f4945688279517e51837f38" },
+        {
+          "name": "showOnlyOwned",
+          "value": "false",
+          "description": "",
+          "id": "pair_e9e1a83ca13a417689e1f685892808ea",
+          "disabled": false
+        }
+      ],
+      "headers": [{ "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" }],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650995,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619627219772,
+      "created": 1619627219772,
+      "name": "Restaurants",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1619627219772,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_0b6213f3bd43484fb5015cae903dfc81",
+      "parentId": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "modified": 1619628972128,
+      "created": 1619391958336,
+      "url": "{{endpoint}}/restaurants/:restaurantId",
+      "name": "Details Retaurant",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "restaurantId",
+          "value": "997d7a3a-7312-43c6-92fa-bd1b6748005d",
+          "description": "",
+          "id": "pair_2c6a26cffd584780a707e2bfbb0221fa",
+          "type": "text",
+          "multiline": false
+        }
+      ],
+      "headers": [{ "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" }],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650945,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_d5352ea6997e4a3aa2e0d12395f6e8ef",
+      "parentId": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "modified": 1619627517068,
+      "created": 1619376684585,
+      "url": "{{endpoint}}/restaurants",
+      "name": "Create Restaurant",
+      "description": "",
+      "method": "POST",
+      "body": { "mimeType": "application/json", "text": "{\n\t\"name\": \"Pierre Restaurant\"\n}" },
+      "parameters": [],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json", "id": "pair_38bfcd7498884375870ec5e391205da2" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}",
+        "disabled": false
+      },
+      "metaSortKey": -1619376650895,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_2a46082eeb0744278cb352710d9aa506",
+      "parentId": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "modified": 1619628481496,
+      "created": 1619628018579,
+      "url": "{{endpoint}}/restaurants/:restaurantId",
+      "name": "Edit Restaurant",
+      "description": "",
+      "method": "PUT",
+      "body": { "mimeType": "application/json", "text": "{\n\t\"name\": \"Pierre Restaurant\"\n}" },
+      "parameters": [
+        {
+          "name": "restaurantId",
+          "value": "997d7a3a-7312-43c6-92fa-bd1b6748005d",
+          "description": "",
+          "id": "pair_8528bd9bfe95462b8bb09213acda3540"
+        }
+      ],
+      "headers": [
+        { "name": "Content-Type", "value": "application/json", "id": "pair_22eabaf64dea43ba898ca890eb7f02d7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}",
+        "prefix": "Bearer"
+      },
+      "metaSortKey": -1619376650870,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_fb383a3a5f074e0bad75d4a1f35d204f",
+      "parentId": "fld_85f8eeb179b6467ba47cffae11362de9",
+      "modified": 1619628399393,
+      "created": 1619628108367,
+      "url": "{{endpoint}}/restaurants/:restaurantId",
+      "name": "Delete Restaurant",
+      "description": "",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [
+        {
+          "name": "restaurantId",
+          "value": "23967e2e-3ebf-450a-992d-1617281cac94",
+          "description": "",
+          "id": "pair_8528bd9bfe95462b8bb09213acda3540"
+        }
+      ],
+      "headers": [],
+      "authentication": {
+        "type": "bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}",
+        "prefix": "Bearer"
+      },
+      "metaSortKey": -1619376650845,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_59de58ed25f542158daf0484e7a0a01c",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619628947957,
+      "created": 1619628500089,
+      "url": "{{endpoint}}/reviews",
+      "name": "List Reviews",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "replied",
+          "value": "true",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": true
+        },
+        {
+          "name": "showOnlyOwned",
+          "value": "true",
+          "description": "",
+          "id": "pair_e9e1a83ca13a417689e1f685892808ea",
+          "disabled": true
+        }
+      ],
+      "headers": [{ "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" }],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650970,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619628494922,
+      "created": 1619628494922,
+      "name": "Reviews",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1608410004551.5,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_33991627b6c5466588c8c23c6b5d37e8",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619629000622,
+      "created": 1619628585459,
+      "url": "{{endpoint}}/reviews",
+      "name": "Create Review",
+      "description": "",
+      "method": "POST",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"restaurant_id\": \"997d7a3a-7312-43c6-92fa-bd1b6748005d\",\n\t\"message\": \"Hey\",\n\t\"rating\": 1,\n\t\"visit_at\": \"{% now 'custom', 'yyyy-MM-DD' %}\"\n}"
+      },
+      "parameters": [],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650963.75,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_7a86dfac47f94962a54e836c4c613bc2",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619629465865,
+      "created": 1619628936261,
+      "url": "{{endpoint}}/reviews/:reviewId",
+      "name": "Edit Review",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"message\": \"Hey\",\n\t\"replyMessage\": \"1234\",\n\t\"rating\": 1,\n\t\"visit_at\": \"{% now 'custom', 'yyyy-MM-DD' %}\"\n}"
+      },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "value": "58401f30-0f4d-457e-83bf-f0eee54091fc",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650954.375,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_219a164b0b644fcbb978ecbdad3c9948",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619631424598,
+      "created": 1619631421525,
+      "url": "{{endpoint}}/reviews/:reviewId",
+      "name": "Delete Review",
+      "description": "",
+      "method": "DELETE",
+      "body": { "mimeType": "application/json", "text": "" },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "value": "58401f30-0f4d-457e-83bf-f0eee54091fc",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650949.6875,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_09735a519bc74c7992d788e5421edc9b",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619631693827,
+      "created": 1619631677558,
+      "url": "{{endpoint}}/reviews/:reviewId/reply",
+      "name": "Create Reply to Review",
+      "description": "",
+      "method": "POST",
+      "body": { "mimeType": "application/json", "text": "{\n\t\"message\": \"123\"\n}" },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "value": "58401f30-0f4d-457e-83bf-f0eee54091fc",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650947.3438,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_ba1032534cb44a6fbeb2671be5a2e3e2",
+      "parentId": "fld_8bc157a40a004ec4ab96fbcdfce67c5d",
+      "modified": 1619631727944,
+      "created": 1619631721160,
+      "url": "{{endpoint}}/reviews/:reviewId/reply",
+      "name": "Delete Reply to Review",
+      "description": "",
+      "method": "DELETE",
+      "body": { "mimeType": "application/json", "text": "" },
+      "parameters": [
+        {
+          "name": "reviewId",
+          "value": "58401f30-0f4d-457e-83bf-f0eee54091fc",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": false
+        }
+      ],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650897.3438,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_50f93019a175441aa861ac8bef9f654c",
+      "parentId": "fld_015fe3e1083342c0b1f8bdeb0fca6bb6",
+      "modified": 1619631918858,
+      "created": 1619631664453,
+      "url": "{{endpoint}}/users",
+      "name": "List Users",
+      "description": "",
+      "method": "GET",
+      "body": {},
+      "parameters": [
+        {
+          "name": "replied",
+          "value": "true",
+          "description": "",
+          "id": "pair_924fd8334f4945688279517e51837f38",
+          "disabled": true
+        },
+        {
+          "name": "showOnlyOwned",
+          "value": "true",
+          "description": "",
+          "id": "pair_e9e1a83ca13a417689e1f685892808ea",
+          "disabled": true
+        }
+      ],
+      "headers": [{ "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" }],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650970,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "fld_015fe3e1083342c0b1f8bdeb0fca6bb6",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619631664448,
+      "created": 1619631664448,
+      "name": "Users",
+      "description": "",
+      "environment": {},
+      "environmentPropertyOrder": null,
+      "metaSortKey": -1602801396941.25,
+      "_type": "request_group"
+    },
+    {
+      "_id": "req_46df80f0d22f47e590c118df67d4e381",
+      "parentId": "fld_015fe3e1083342c0b1f8bdeb0fca6bb6",
+      "modified": 1619631976062,
+      "created": 1619631664461,
+      "url": "{{endpoint}}/users/:userId",
+      "name": "Edit User",
+      "description": "",
+      "method": "PUT",
+      "body": {
+        "mimeType": "application/json",
+        "text": "{\n\t\"name\": \"\",\n\t\"username\": \"\",\n\t\"email\": \"\",\n\t\"role\": \"\"\n}"
+      },
+      "parameters": [
+        { "name": "userId", "value": "1", "description": "", "id": "pair_e36377f264ed4e2ebbd02c206ef3fdb8" }
+      ],
+      "headers": [
+        { "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" },
+        { "name": "Content-Type", "value": "application/json", "id": "pair_854c0e3405f443a494ed7670f1454cd7" }
+      ],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650963.75,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "req_b1e057493ddc4bb38b7bb4dc28d2a75e",
+      "parentId": "fld_015fe3e1083342c0b1f8bdeb0fca6bb6",
+      "modified": 1619631993684,
+      "created": 1619631989175,
+      "url": "{{endpoint}}/users/:userId",
+      "name": "Delete User",
+      "description": "",
+      "method": "DELETE",
+      "body": {},
+      "parameters": [
+        { "name": "userId", "value": "1", "description": "", "id": "pair_e36377f264ed4e2ebbd02c206ef3fdb8" }
+      ],
+      "headers": [{ "name": "", "value": "", "description": "", "id": "pair_0d509f5751034acdb646ec06e5fdad8a" }],
+      "authentication": {
+        "type": "bearer",
+        "prefix": "Bearer",
+        "token": "{% response 'body', 'req_0818731eb960469e92b15284dc424997', 'b64::JC50b2tlbg==::46b', 'when-expired', 60 %}"
+      },
+      "metaSortKey": -1619376650959.0625,
+      "isPrivate": false,
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false,
+      "settingEncodeUrl": true,
+      "settingRebuildPath": true,
+      "settingFollowRedirects": "global",
+      "_type": "request"
+    },
+    {
+      "_id": "env_a37b6598fce928cdd0bfc20d033e29bb24796c8a",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619627602184,
+      "created": 1619376081963,
+      "name": "Base Environment",
+      "data": { "endpoint": "http://localhost:1234", "restaurant_id": "" },
+      "dataPropertyOrder": { "&": ["endpoint", "restaurant_id"] },
+      "color": null,
+      "isPrivate": false,
+      "metaSortKey": 1619376081963,
+      "_type": "environment"
+    },
+    {
+      "_id": "jar_a37b6598fce928cdd0bfc20d033e29bb24796c8a",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619376081965,
+      "created": 1619376081965,
+      "name": "Default Jar",
+      "cookies": [],
+      "_type": "cookie_jar"
+    },
+    {
+      "_id": "spc_0acf7536ac2349ada3ba20ffeb91f95f",
+      "parentId": "wrk_c960c6f4842a45a699d370a439f3344c",
+      "modified": 1619376081821,
+      "created": 1619376081821,
+      "fileName": "toptal-exercise",
+      "contents": "",
+      "contentType": "yaml",
+      "_type": "api_spec"
+    }
+  ]
+}

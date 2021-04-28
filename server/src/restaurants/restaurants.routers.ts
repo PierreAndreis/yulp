@@ -103,21 +103,24 @@ routers.put(
     const restaurantId = req.params.id;
     const body: { name: string } = req.body;
 
-    const restaurant = await db.restaurants.update({
-      where: {
-        id: restaurantId,
-      },
-      data: {
-        name: body.name,
-      },
-      select: RESTAURANT_SELECT,
-    });
+    try {
+      const restaurant = await db.restaurants.update({
+        where: {
+          id: restaurantId,
+        },
+        data: {
+          name: body.name,
+        },
+        select: RESTAURANT_SELECT,
+      });
 
-    if (!restaurant) {
-      throw new createHttpError.NotFound('Restaurant not found.');
+      res.status(200).json(restaurant);
+    } catch (e) {
+      if (e.message.includes('Record to update not found')) {
+        throw new createHttpError.NotFound('Restaurant not found.');
+      }
+      throw e;
     }
-
-    res.status(200).json(restaurant);
   },
 );
 
@@ -125,15 +128,15 @@ routers.delete('/restaurants/:id', ensureAuthentication, ensureRole('ADMIN'), as
   const restaurantId = req.params.id;
 
   // https://github.com/prisma/prisma/issues/2328
-  const restaurant: Pick<Restaurants, 'id' | 'name' | 'owner_user_id'> = await db.$queryRaw`
+  const restaurant: Array<Pick<Restaurants, 'id' | 'name' | 'owner_user_id'>> = await db.$queryRaw`
     DELETE FROM "public"."Restaurants" WHERE id = ${restaurantId} RETURNING id, name owner_user_id
   `;
 
-  if (!restaurant) {
+  if (restaurant.length < 1) {
     throw new createHttpError.NotFound('Restaurant not found.');
   }
 
-  res.status(200).json(restaurant);
+  res.status(200).json(restaurant[0]);
 });
 
 export default routers;

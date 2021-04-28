@@ -42,15 +42,12 @@ const ReviewsCreateModal = (props: Props) => {
     onCloseModal();
   }
 
-  const { mutate: sendReview, status } = useMutation(
-    (data: Parameters<typeof api.createReview>[1]) => api.createReview(props.restaurantId, data),
-    {
-      onSuccess: () => {
-        queryClient.refetchQueries('restaurants');
-        onClose();
-      },
+  const { mutate: sendReview, status } = useMutation(api.createReview, {
+    onSuccess: () => {
+      queryClient.refetchQueries('restaurants');
+      onClose();
     },
-  );
+  });
 
   return (
     <>
@@ -61,7 +58,7 @@ const ReviewsCreateModal = (props: Props) => {
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              sendReview({ message, rating, visit_at: visit_at.toISOString() });
+              sendReview({ restaurant_id: props.restaurantId, message, rating, visit_at: visit_at.toISOString() });
             }}
           >
             <ModalHeader>Leave a Review</ModalHeader>

@@ -111,12 +111,13 @@ type ReviewCreateData = {
   message: string;
   rating: number;
   visit_at: string;
+  restaurant_id: string;
 };
 
 type ReviewCreateResponse = Review;
 
-export async function createReview(id: string, data: ReviewCreateData): Promise<ReviewCreateResponse> {
-  return authorizedRequest(`${BASE_URL}/restaurants/${id}/reviews`, {
+export async function createReview(data: ReviewCreateData): Promise<ReviewCreateResponse> {
+  return authorizedRequest(`${BASE_URL}/reviews`, {
     method: 'POST',
     body: JSON.stringify(data),
   }).then(parse);

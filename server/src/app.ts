@@ -9,7 +9,7 @@ import { errors } from 'celebrate';
 import cors from 'cors';
 import express, { NextFunction } from 'express';
 import helmet from 'helmet';
-import { isHttpError } from 'http-errors';
+import createHttpError, { isHttpError } from 'http-errors';
 import morgan from 'morgan';
 import authRouters from './auth/auth.routers';
 import restaurantsRouters from './restaurants/restaurants.routers';
@@ -30,6 +30,9 @@ app.use(restaurantsRouters);
 app.use(reviewRouters);
 app.use(usersRouters);
 
+app.use(() => {
+  throw new createHttpError.NotFound('Resource not found');
+});
 app.use(errors());
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

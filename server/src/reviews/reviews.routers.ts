@@ -34,50 +34,6 @@ export const REVIEW_SELECT = {
   },
 };
 
-routers.post(
-  '/restaurants/:id/reviews',
-  ensureAuthentication,
-  ensureRole(['USER', 'ADMIN']),
-  celebrate({
-    [Segments.BODY]: Joi.object().keys({
-      message: Joi.string().required().min(2),
-      rating: Joi.number().min(1).max(5),
-      visit_at: Joi.date(),
-    }),
-  }),
-  async (req, res) => {
-    const body: { message: string; rating: number; visit_at: string } = req.body;
-    const restaurant_id = req.params.id;
-    const user = req.user as NonNullable<typeof req.user>;
-
-    const restaurant = await db.restaurants.findUnique({ where: { id: restaurant_id }, include: { reviews: true } });
-
-    if (!restaurant) {
-      throw new createHttpError.NotFound('Restaurant not found.');
-    }
-
-    const hasNotReviewed = restaurant.reviews.every((review) => review.user_id !== user.id);
-
-    if (!hasNotReviewed) {
-      throw new createHttpError.Conflict("You can't review a restaurant more than once.");
-    }
-
-    const review = await db.reviews.create({
-      data: {
-        message: body.message,
-        visit_at: body.visit_at,
-        rating: body.rating,
-        user_id: user.id,
-        created_at: new Date(),
-        restaurant_id: restaurant.id,
-      },
-      select: REVIEW_SELECT,
-    });
-
-    res.status(200).json(review);
-  },
-);
-
 routers.get(
   '/reviews',
   ensureAuthentication,
@@ -128,6 +84,57 @@ routers.get(
   },
 );
 
+routers.post(
+  '/reviews',
+  ensureAuthentication,
+  ensureRole(['USER', 'ADMIN']),
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      restaurant_id: Joi.string().required(),
+      message: Joi.string().required().min(2),
+      rating: Joi.number().min(1).max(5),
+      visit_at: Joi.date(),
+    }),
+  }),
+  async (req, res) => {
+    const body: { message: string; rating: number; visit_at: string; restaurant_id: string } = req.body;
+    const user = req.user as NonNullable<typeof req.user>;
+
+    const restaurant = await db.restaurants.findUnique({
+      where: { id: body.restaurant_id },
+      include: { reviews: true },
+    });
+
+    if (!restaurant) {
+      throw new createHttpError.NotFound('Restaurant not found.');
+    }
+
+    if (restaurant.owner_user_id === user.id) {
+      throw new createHttpError.Forbidden("You can't review your own restaurant");
+    }
+
+    const hasNotReviewed = restaurant.reviews.every((review) => review.user_id !== user.id);
+
+    if (!hasNotReviewed) {
+      throw new createHttpError.Conflict("You can't review a restaurant more than once.");
+    }
+
+    const review = await db.reviews.create({
+      data: {
+        message: body.message,
+        visit_at: body.visit_at,
+        rating: body.rating,
+        user_id: user.id,
+        created_at: new Date(),
+        restaurant_id: restaurant.id,
+      },
+      select: REVIEW_SELECT,
+    });
+
+    res.status(200).json(review);
+  },
+);
+
 routers.put(
   '/reviews/:id',
   ensureAuthentication,
@@ -144,9 +151,22 @@ routers.put(
     const reviewId = req.params.id;
     const body: { message?: string; rating?: number; visit_at?: Date; replyMessage?: string } = req.body;
 
-    const review = await db.reviews.update({
+    const review = await db.reviews.findUnique({
       where: {
         id: reviewId,
+      },
+      include: {
+        reply: true,
+      },
+    });
+
+    if (!review) {
+      throw new createHttpError.NotFound('Review not found.');
+    }
+
+    const updatedReview = await db.reviews.update({
+      where: {
+        id: review.id,
       },
       data: {
         message: body.message,
@@ -166,7 +186,7 @@ routers.put(
                 },
               },
             }
-          : body.replyMessage === null
+          : body.replyMessage === null && review.reply
           ? {
               reply: {
                 delete: true,
@@ -177,29 +197,23 @@ routers.put(
       select: REVIEW_SELECT,
     });
 
-    if (!review) {
-      throw new createHttpError.NotFound('Review not found.');
-    }
-
-    res.status(200).json(review);
+    res.status(200).json(updatedReview);
   },
 );
 
 routers.delete('/reviews/:id', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
   const reviewId = req.params.id;
 
-  const review = await db.reviews.delete({
-    where: {
-      id: reviewId,
-    },
-    select: REVIEW_SELECT,
-  });
+  // https://github.com/prisma/prisma/issues/2328
+  const count = await db.$executeRaw`
+    DELETE FROM "public"."Reviews" WHERE id = ${reviewId}
+  `;
 
-  if (!review) {
+  if (count < 1) {
     throw new createHttpError.NotFound('Review not found.');
   }
 
-  res.status(200).json(review);
+  res.status(204).end();
 });
 
 routers.post(
@@ -292,7 +306,22 @@ routers.put(
 routers.delete('/reviews/:id/reply', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
   const reviewId = req.params.id;
 
-  const review = await db.reviews.update({
+  const review = await db.reviews.findUnique({
+    where: {
+      id: reviewId,
+    },
+    select: REVIEW_SELECT,
+  });
+
+  if (!review) {
+    throw new createHttpError.NotFound('Review not found.');
+  }
+
+  if (!review.reply) {
+    throw new createHttpError.NotFound('Review has no reply.');
+  }
+
+  const updatedReview = await db.reviews.update({
     where: {
       id: reviewId,
     },
@@ -304,17 +333,7 @@ routers.delete('/reviews/:id/reply', ensureAuthentication, ensureRole('ADMIN'), 
     select: REVIEW_SELECT,
   });
 
-  await db.reviews.delete({
-    where: {
-      id: reviewId,
-    },
-  });
-
-  if (!review) {
-    throw new createHttpError.NotFound('Review not found.');
-  }
-
-  res.status(200).json(review);
+  res.status(200).json(updatedReview);
 });
 
 export default routers;

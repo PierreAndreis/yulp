@@ -30,7 +30,7 @@ export const parse = async (response: Response) => {
     return true;
   }
 
-  const body = response.json();
+  const body = await response.json();
 
   if (response.status === 401) {
     useTokenStorage.getState().setToken(null);
