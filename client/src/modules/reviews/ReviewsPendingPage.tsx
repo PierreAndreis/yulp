@@ -1,9 +1,7 @@
-import { Box, Center, Icon, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Center, Spinner, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { FaExclamationTriangle } from 'react-icons/fa';
 import { useQuery } from 'react-query';
-import { useParams } from 'react-router';
-import { Card } from '../../components/Card';
+import ErrorComponent from '../../components/ErrorComponent';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../services/Auth';
 import { isError } from '../../services/fetch';
@@ -11,26 +9,22 @@ import * as api from './../../services/api';
 import ReviewsCard from './ReviewsCard';
 
 const ReviewsPendingPage = () => {
-  const { data, error, status } = useQuery(`reviews_pending`, () => api.pendingReviews());
+  const { data, error, status } = useQuery(['reviews', 'reviews.pending'], () => api.reviews({ replied: false }));
+
+  const { user } = useAuth();
+
+  if (user?.role === 'USER') {
+    return (
+      <Layout>
+        <ErrorComponent message="You don't have enough permission to see this page." />
+      </Layout>
+    );
+  }
 
   if (error) {
     return (
       <Layout>
-        <Box maxW="sm" mx="auto">
-          <Card>
-            <Stack>
-              <Stack direction="row" align="center">
-                <Text fontWeight="bold" fontSize="xl">
-                  Error
-                </Text>{' '}
-                <Icon as={FaExclamationTriangle} color="yellow.400" />
-              </Stack>
-              <Text color="gray.700">
-                {isError(error) ? error.message : 'Error while fetching for this restaurant. Try again later.'}
-              </Text>
-            </Stack>
-          </Card>
-        </Box>
+        <ErrorComponent message={isError(error) ? error.message : null} />
       </Layout>
     );
   }

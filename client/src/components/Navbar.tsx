@@ -1,7 +1,7 @@
 import { Button, ButtonGroup, IconButton } from '@chakra-ui/button';
 import { Box, Stack } from '@chakra-ui/layout';
 import React from 'react';
-import { BiFoodMenu } from 'react-icons/bi';
+import { BiFoodMenu, BiPaperclip, BiStar } from 'react-icons/bi';
 import { IoMdExit } from 'react-icons/io';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../services/Auth';
@@ -27,16 +27,29 @@ export default function Navbar() {
             >
               Restaurants
             </Button>
-            {user.role === 'OWNER' ? (
+            {user?.role === 'OWNER' ? (
               <Button
                 as={Link}
                 to={'/reviews-pending'}
                 bg="transparent"
                 color="white"
                 _hover={{ bg: 'blue.300' }}
-                leftIcon={<BiFoodMenu />}
+                leftIcon={<BiPaperclip />}
               >
                 Reviews Pending
+              </Button>
+            ) : null}
+            {user?.role === 'ADMIN' ? (
+              <Button
+                as={Link}
+                to={'/admin'}
+                bg="transparent"
+                variant="solid"
+                color="white"
+                _hover={{ bg: 'blue.300' }}
+                leftIcon={<BiStar />}
+              >
+                Admin
               </Button>
             ) : null}
           </ButtonGroup>

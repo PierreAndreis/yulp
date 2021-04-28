@@ -22,7 +22,7 @@ const ReviewsCard = (props: Props) => {
           as="cite"
           fontWeight="500"
           fontStyle="normal"
-          color={user.id === props.item.user.id ? 'blue.600' : 'inherit'}
+          color={user?.id === props.item.user.id ? 'blue.600' : 'inherit'}
         >
           {props.item.user.name}
         </Text>

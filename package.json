@@ -7,15 +7,17 @@
   "private": true,
   "workspaces": [
     "client",
-    "server",
-    "common"
+    "server"
   ],
   "scripts": {
     "dev": "lerna run dev --parallel --stream",
-    "start": "lerna run start"
+    "build": "learn run build --parallel --stream",
+    "start": "lerna run start --parallel --stream"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.25.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",

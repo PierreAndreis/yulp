@@ -1,4 +1,3 @@
-import { QueryFunctionContext } from 'react-query';
 import { useTokenStorage } from './Auth';
 
 export default async function authorizedRequest(url: string, opts: RequestInit = {}) {

@@ -1,14 +1,15 @@
-import { Button, Center, Spinner } from '@chakra-ui/react';
+import { Center, Spinner } from '@chakra-ui/react';
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import Layout from './components/Layout';
+import Navbar from './components/Navbar';
+import AdminPage from './modules/admin/AdminPage';
 import LoginPage from './modules/LoginPage';
-import RestaurantsPage from './modules/restaurants/RestaurantsPage';
 import RestaurantsDetailsPage from './modules/restaurants/RestaurantsDetailsPage';
+import RestaurantsPage from './modules/restaurants/RestaurantsPage';
+import ReviewsPendingPage from './modules/reviews/ReviewsPendingPage';
 import SignupPage from './modules/SignupPage';
 import { useAuth } from './services/Auth';
-import Navbar from './components/Navbar';
-import ReviewsPendingPage from './modules/reviews/ReviewsPendingPage';
 
 function App() {
   const { isLoggedIn, isLoading } = useAuth();
@@ -43,10 +44,12 @@ function App() {
         <Route path="/reviews-pending">
           <ReviewsPendingPage />
         </Route>
+        <Route path="/admin">
+          <AdminPage />
+        </Route>
         <Route path="/">
           <RestaurantsPage />
         </Route>
-        <Route path="*">hi</Route>
       </Switch>
     </Layout>
   );

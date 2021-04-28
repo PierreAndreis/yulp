@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-let db = new PrismaClient({ log: ['info'] });
+const db = new PrismaClient({ log: ['info'] });
 
 db.$use(async (params, next) => {
   const before = Date.now();
@@ -9,7 +9,10 @@ db.$use(async (params, next) => {
 
   const after = Date.now();
 
-  console.log(`Query ${params.model}.${params.action} took ${after - before}ms`);
+  if (process.env.NODE_ENV !== 'production') {
+    // eslint-disable-next-line no-console
+    console.log(`Query ${params.model}.${params.action} took ${after - before}ms`);
+  }
 
   return result;
 });

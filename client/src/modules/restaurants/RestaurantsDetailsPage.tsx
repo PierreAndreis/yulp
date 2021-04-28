@@ -1,10 +1,10 @@
-import { Box, Button, Center, GridItem, Heading, Icon, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
+import { Button, Center, GridItem, Heading, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react';
 import React from 'react';
-import { FaChevronLeft, FaExclamationTriangle } from 'react-icons/fa';
+import { FaChevronLeft } from 'react-icons/fa';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
-import { Card } from '../../components/Card';
+import ErrorComponent from '../../components/ErrorComponent';
 import Layout from '../../components/Layout';
 import { useAuth } from '../../services/Auth';
 import { isError } from '../../services/fetch';
@@ -18,26 +18,12 @@ const RestaurantsDetailsPage = () => {
 
   const { user } = useAuth();
 
-  const { data, error, status } = useQuery(`restaurants.${id}`, () => api.restaurantsDetails(id));
+  const { data, error, status } = useQuery(['restaurants', `restaurants.${id}`], () => api.restaurantsDetails(id));
 
   if (error) {
     return (
       <Layout>
-        <Box maxW="sm" mx="auto">
-          <Card>
-            <Stack>
-              <Stack direction="row" align="center">
-                <Text fontWeight="bold" fontSize="xl">
-                  Error
-                </Text>{' '}
-                <Icon as={FaExclamationTriangle} color="yellow.400" />
-              </Stack>
-              <Text color="gray.700">
-                {isError(error) ? error.message : 'Error while fetching for this restaurant. Try again later.'}
-              </Text>
-            </Stack>
-          </Card>
-        </Box>
+        <ErrorComponent message={isError(error) ? error.message : null} />
       </Layout>
     );
   }
@@ -73,8 +59,8 @@ const RestaurantsDetailsPage = () => {
     return review.rating < lowestReview.rating ? review : lowestReview;
   }, null);
 
-  const has_user_reviewed = data.reviews.find((review) => review.user.id === user.id);
-  const is_restaurant_owner = data.owner_user_id === user.id;
+  const has_user_reviewed = data.reviews.find((review) => review.user.id === user?.id);
+  const is_restaurant_owner = data.owner_user_id === user?.id;
 
   return (
     <Layout>
@@ -129,7 +115,7 @@ const RestaurantsDetailsPage = () => {
           ))
         ) : (
           <Text color="gray.700">
-            This restaurant has no reviews yet. {user.role === 'USER' && 'Be the first one!'}
+            This restaurant has no reviews yet. {user?.role === 'USER' && 'Be the first one!'}
           </Text>
         )}
       </Stack>

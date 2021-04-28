@@ -5,42 +5,26 @@ import createHttpError from 'http-errors';
 import ensureRole from '../utils/ensureRole';
 import db from './../db';
 import ensureAuthentication from './../utils/ensureAuthentication';
+import { REVIEW_SELECT } from '../reviews/reviews.routers';
 
 const routers = express.Router();
+
+const RESTAURANT_SELECT = {
+  id: true,
+  name: true,
+  owner_user_id: true,
+  reviews: {
+    select: REVIEW_SELECT,
+    orderBy: {
+      created_at: 'desc' as const,
+    },
+  },
+};
 
 routers.get('/restaurants/:id', ensureAuthentication, async (req, res) => {
   const restaurant = await db.restaurants.findUnique({
     where: { id: req.params.id },
-    select: {
-      id: true,
-      name: true,
-      owner_user_id: true,
-      reviews: {
-        select: {
-          id: true,
-          created_at: true,
-          message: true,
-          visit_at: true,
-          rating: true,
-          reply: {
-            select: {
-              id: true,
-              message: true,
-              created_at: true,
-            },
-          },
-          user: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
-        orderBy: {
-          created_at: 'desc',
-        },
-      },
-    },
+    select: RESTAURANT_SELECT,
   });
 
   if (!restaurant) {
@@ -93,7 +77,7 @@ routers.post(
   ensureRole(Role.OWNER),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      name: Joi.string().required(),
+      name: Joi.string().required().min(3),
     }),
   }),
   async (req, res) => {
@@ -105,5 +89,53 @@ routers.post(
     res.status(201).json(restaurant);
   },
 );
+
+routers.put(
+  '/restaurants/:id',
+  ensureAuthentication,
+  ensureRole('ADMIN'),
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      name: Joi.string(),
+    }),
+  }),
+  async (req, res) => {
+    const restaurantId = req.params.id;
+    const body: { name: string } = req.body;
+
+    const restaurant = await db.restaurants.update({
+      where: {
+        id: restaurantId,
+      },
+      data: {
+        name: body.name,
+      },
+      select: RESTAURANT_SELECT,
+    });
+
+    if (!restaurant) {
+      throw new createHttpError.NotFound('Restaurant not found.');
+    }
+
+    res.status(200).json(restaurant);
+  },
+);
+
+routers.delete('/restaurants/:id', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
+  const restaurantId = req.params.id;
+
+  const restaurant = await db.restaurants.delete({
+    where: {
+      id: restaurantId,
+    },
+    select: RESTAURANT_SELECT,
+  });
+
+  if (!restaurant) {
+    throw new createHttpError.NotFound('Restaurant not found.');
+  }
+
+  res.status(200).json(restaurant);
+});
 
 export default routers;

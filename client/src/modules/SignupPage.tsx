@@ -11,7 +11,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react';
-import { Role } from '@prisma/client';
+import type { Role } from '@prisma/client';
 import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import { useHistory } from 'react-router';
@@ -37,7 +37,7 @@ const SignupPage = () => {
 
   const [name, setName] = useState('');
 
-  const [role, setRole] = useState<Role>(Role.USER);
+  const [role, setRole] = useState<Role>('USER');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   return (
@@ -85,13 +85,14 @@ const SignupPage = () => {
               maxLength={30}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              isRequired
             />
 
             <FormControl id="email">
               <FormLabel>Role</FormLabel>
               <Select value={role} onChange={(e) => setRole(e.target.value as Role)}>
-                <option value={Role.OWNER}>Restaurant Owner</option>
-                <option value={Role.USER}>Customer</option>
+                <option value={'OWNER'}>Restaurant Owner</option>
+                <option value={'USER'}>Customer</option>
               </Select>
             </FormControl>
 

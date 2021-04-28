@@ -7,7 +7,7 @@ import ensureAuthentication from './../utils/ensureAuthentication';
 
 const routers = express.Router();
 
-const REVIEW_SELECT = {
+export const REVIEW_SELECT = {
   id: true,
   created_at: true,
   message: true,
@@ -19,6 +19,11 @@ const REVIEW_SELECT = {
       id: true,
       message: true,
       created_at: true,
+    },
+  },
+  restaurant: {
+    select: {
+      name: true,
     },
   },
   user: {
@@ -76,22 +81,37 @@ routers.post(
 routers.get(
   '/reviews',
   ensureAuthentication,
-  ensureRole('OWNER'),
+  ensureRole(['ADMIN', 'OWNER']),
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
-      filter: Joi.allow('NO_REPLY'),
+      replied: Joi.boolean(),
     }),
   }),
   async (req, res) => {
-    const filter = req.query.filter;
+    const replied = req.query.replied;
     const user = req.user as NonNullable<typeof req.user>;
+    const isOwner = user.role === 'OWNER';
 
     const reviews = await db.reviews.findMany({
       where: {
-        restaurant: {
-          owner_user_id: user.id,
-        },
-        ...(filter === 'NO_REPLY' ? { reply: null } : {}),
+        ...(isOwner
+          ? {
+              restaurant: {
+                owner_user_id: user.id,
+              },
+            }
+          : {}),
+        ...(typeof replied === 'boolean'
+          ? {
+              reply: replied
+                ? {
+                    id: {
+                      gt: '1',
+                    },
+                  }
+                : null,
+            }
+          : {}),
       },
       select: REVIEW_SELECT,
       orderBy: {
@@ -103,13 +123,81 @@ routers.get(
   },
 );
 
+routers.put(
+  '/reviews/:id',
+  ensureAuthentication,
+  ensureRole('ADMIN'),
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      message: Joi.string().min(2).max(255),
+      rating: Joi.number().min(1).max(5),
+      visit_at: Joi.date(),
+      replyMessage: Joi.string().min(1).max(255),
+    }),
+  }),
+  async (req, res) => {
+    const reviewId = req.params.id;
+    const body: { message?: string; rating?: number; visit_at?: Date; replyMessage?: string } = req.body;
+
+    const review = await db.reviews.update({
+      where: {
+        id: reviewId,
+      },
+      data: {
+        message: body.message,
+        rating: body.rating,
+        visit_at: body.visit_at,
+        ...(body.replyMessage
+          ? {
+              reply: {
+                upsert: {
+                  create: {
+                    message: body.replyMessage,
+                    created_at: new Date(),
+                  },
+                  update: {
+                    message: body.replyMessage,
+                  },
+                },
+              },
+            }
+          : {}),
+      },
+      select: REVIEW_SELECT,
+    });
+
+    if (!review) {
+      throw new createHttpError.NotFound('Review not found.');
+    }
+
+    res.status(200).json(review);
+  },
+);
+
+routers.delete('/reviews/:id', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
+  const reviewId = req.params.id;
+
+  const review = await db.reviews.delete({
+    where: {
+      id: reviewId,
+    },
+    select: REVIEW_SELECT,
+  });
+
+  if (!review) {
+    throw new createHttpError.NotFound('Review not found.');
+  }
+
+  res.status(200).json(review);
+});
+
 routers.post(
   '/reviews/:id/reply',
   ensureAuthentication,
   ensureRole('OWNER'),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      message: Joi.string().required(),
+      message: Joi.string().required().min(2).max(255),
     }),
   }),
   async (req, res) => {
@@ -154,5 +242,62 @@ routers.post(
     res.status(200).json(updatedReview);
   },
 );
+
+routers.put(
+  '/reviews/:id/reply',
+  ensureAuthentication,
+  ensureRole('ADMIN'),
+  celebrate({
+    [Segments.BODY]: Joi.object().keys({
+      message: Joi.string().required().min(2).max(255),
+    }),
+  }),
+  async (req, res) => {
+    const reviewId = req.params.id;
+    const body: { message: string } = req.body;
+
+    const review = await db.reviews.update({
+      where: {
+        id: reviewId,
+      },
+      data: {
+        reply: {
+          update: {
+            message: body.message,
+          },
+        },
+      },
+      select: REVIEW_SELECT,
+    });
+
+    if (!review) {
+      throw new createHttpError.NotFound('Review not found.');
+    }
+
+    res.status(200).json(review);
+  },
+);
+
+routers.delete('/reviews/:id/reply', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
+  const reviewId = req.params.id;
+
+  const review = await db.reviews.update({
+    where: {
+      id: reviewId,
+    },
+    data: {
+      reply: {
+        delete: true,
+      },
+    },
+    select: REVIEW_SELECT,
+  });
+
+  if (!review) {
+    throw new createHttpError.NotFound('Review not found.');
+  }
+
+  res.status(200).json(review);
+});
 
 export default routers;

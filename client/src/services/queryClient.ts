@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
             status: 'error',
             title: error.message,
             isClosable: true,
-            duration: 2000,
+            duration: 4000,
           });
           return;
         }
@@ -22,7 +22,7 @@ const queryClient = new QueryClient({
           status: 'error',
           title: 'Unknown Error. Please try again later.',
           isClosable: true,
-          duration: 2000,
+          duration: 4000,
         });
       },
     },

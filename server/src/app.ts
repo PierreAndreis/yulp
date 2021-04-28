@@ -1,5 +1,8 @@
+/* eslint-disable import/first */
 import { config } from 'dotenv';
-config();
+config({
+  path: '../.env',
+});
 require('express-async-errors');
 
 import { errors } from 'celebrate';
@@ -11,6 +14,7 @@ import morgan from 'morgan';
 import authRouters from './auth/auth.routers';
 import restaurantsRouters from './restaurants/restaurants.routers';
 import reviewRouters from './reviews/reviews.routers';
+import usersRouters from './users/users.routers';
 
 const app = express();
 
@@ -24,10 +28,12 @@ app.use(express.json());
 app.use(authRouters);
 app.use(restaurantsRouters);
 app.use(reviewRouters);
+app.use(usersRouters);
 
 app.use(errors());
 
-app.use(function (err: Error, _: express.Request, res: express.Response, __: NextFunction) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use(function (err: Error, _req: express.Request, res: express.Response, _next: NextFunction) {
   if (isHttpError(err)) {
     // These errors are expected so no need to log it.
     res.status(err.statusCode).send({

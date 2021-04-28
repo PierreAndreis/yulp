@@ -1,29 +1,27 @@
 import { useDisclosure } from '@chakra-ui/hooks';
-import { Box, Stack, Text } from '@chakra-ui/layout';
-import { chakra, ChakraComponent, ChakraProps } from '@chakra-ui/system';
-import React, { useState } from 'react';
-import { Card } from '../../components/Card';
-import { Review } from './../../services/api';
-import ReviewsStars from './ReviewsStars';
+import { Stack } from '@chakra-ui/layout';
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  FormControl,
-  FormLabel,
-  Input,
   Button,
   ButtonGroup,
-  Textarea,
+  FormControl,
   FormHelperText,
+  FormLabel,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Textarea,
 } from '@chakra-ui/react';
+import { chakra, ChakraProps } from '@chakra-ui/system';
+import React, { useState } from 'react';
 import { useMutation } from 'react-query';
 import * as api from '../../services/api';
 import queryClient from '../../services/queryClient';
+import ReviewsStars from './ReviewsStars';
 
 type Props = {
   children: React.ReactNode;
@@ -48,7 +46,7 @@ const ReviewsCreateModal = (props: Props) => {
     (data: Parameters<typeof api.createReview>[1]) => api.createReview(props.restaurantId, data),
     {
       onSuccess: () => {
-        queryClient.refetchQueries({ queryKey: `restaurants.${props.restaurantId}` });
+        queryClient.refetchQueries('restaurants');
         onClose();
       },
     },

@@ -7,7 +7,6 @@ import { Logo } from '../components/Logo';
 import { PasswordField } from '../components/PasswordField';
 import * as api from '../services/api';
 import { useTokenStorage } from '../services/Auth';
-import { isError } from '../services/fetch';
 
 const LoginPage = () => {
   const setToken = useTokenStorage((state) => state.setToken);

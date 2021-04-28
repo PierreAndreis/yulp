@@ -38,7 +38,7 @@ const RestaurantCreatePage = (props: Props) => {
 
   const { mutate: createRestaurant, status } = useMutation(api.createRestaurant, {
     onSuccess: (data) => {
-      queryClient.refetchQueries({ queryKey: `restaurants.list` });
+      queryClient.refetchQueries(['restaurants']);
       onClose();
       history.push(`/restaurants/${data.id}`);
     },

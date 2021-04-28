@@ -1,5 +1,4 @@
 import { useDisclosure } from '@chakra-ui/hooks';
-import { Box } from '@chakra-ui/layout';
 import { Button, ButtonGroup, Collapse, FormControl, FormLabel, Textarea } from '@chakra-ui/react';
 import { chakra, ChakraProps } from '@chakra-ui/system';
 import React, { useState } from 'react';
@@ -25,10 +24,9 @@ const ReviewReply = (props: Props) => {
   const { mutate: sendReview, status } = useMutation(
     (data: Parameters<typeof api.replyReview>[1]) => api.replyReview(props.reviewId, data),
     {
-      onSuccess: (data) => {
-        queryClient.refetchQueries({ queryKey: `restaurants` });
-        queryClient.refetchQueries({ queryKey: `restaurants.${data.restaurant_id}` });
-        queryClient.refetchQueries({ queryKey: `reviews_pending` });
+      onSuccess: () => {
+        queryClient.refetchQueries('restaurants');
+        queryClient.refetchQueries('reviews');
         onClose();
       },
     },

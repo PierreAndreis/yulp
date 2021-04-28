@@ -17,7 +17,7 @@ export const useTokenStorage = create<{ token: string | null; setToken: (token: 
 }));
 
 type AuthContextValue = {
-  user: null | any;
+  user: null | api.User;
   isLoggedIn: boolean;
   isLoading: boolean;
   logout: () => void;
@@ -50,7 +50,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
     }
 
     setInitialized(true);
-  }, [status, setInitialized]);
+  }, [status, setInitialized, token]);
 
   const logout = useCallback(() => {
     setToken(null);
@@ -61,8 +61,8 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
   const isLoggedIn = token ? Boolean(data?.user) : false;
 
   const value = useMemo(
-    () => ({ user: data?.user, isLoggedIn, isInitialized, logout, isLoading: status === 'loading' }),
-    [data?.user, isLoggedIn, status, logout],
+    () => ({ user: data?.user ?? null, isLoggedIn, isInitialized, logout, isLoading: status === 'loading' }),
+    [data?.user, isLoggedIn, isInitialized, logout, status],
   );
 
   return <AuthContext.Provider value={value}>{props.children}</AuthContext.Provider>;
