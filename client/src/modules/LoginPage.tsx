@@ -23,7 +23,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState('');
   return (
     <Box maxW="md" mx="auto" pt={10}>
-      <Logo mx="auto" h="8" mb={{ base: '10', md: '20' }} />
+      <Logo mx="auto" h="60px" mb={5} />
       <Heading textAlign="center" size="xl" fontWeight="extrabold">
         Sign in to your account
       </Heading>

@@ -40,7 +40,7 @@ routers.post(
   ensureRole('USER'),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      message: Joi.string().required().min(2).max(255),
+      message: Joi.string().required().min(2),
       rating: Joi.number().min(1).max(5),
       visit_at: Joi.date(),
     }),
@@ -197,7 +197,7 @@ routers.post(
   ensureRole('OWNER'),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
-      message: Joi.string().required().min(2).max(255),
+      message: Joi.string().required().min(2),
     }),
   }),
   async (req, res) => {

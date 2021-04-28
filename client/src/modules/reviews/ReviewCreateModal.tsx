@@ -76,7 +76,6 @@ const ReviewsCreateModal = (props: Props) => {
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     required
-                    maxLength={255}
                   />
                   <FormHelperText>Max characters: 255</FormHelperText>
                 </FormControl>
