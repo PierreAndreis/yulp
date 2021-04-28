@@ -24,20 +24,29 @@ import RestaurantsCreateModal from './RestaurantsCreateModal';
 const RestaurantsPage = () => {
   const { user } = useAuth();
   const [ratingLeast, setRatingLeast] = useState(0);
-  const { data, status } = useQuery(['restaurants', `restaurants.list.ratingLeast[${ratingLeast}]`], () =>
-    api.restaurants({
-      ratingLeast,
-    }),
+
+  const { data, status } = useQuery(
+    ['restaurants', 'restaurants.list.owned', `restaurants.list.ratingLeast[${ratingLeast}]`],
+    () =>
+      api.restaurants({
+        ratingLeast,
+        showOnlyOwned: user?.role === 'OWNER',
+      }),
   );
-  const { data: reviews_pending } = useQuery(['reviews', 'reviews.pending'], () => api.reviews({ replied: false }), {
-    enabled: user?.role === 'OWNER',
-  });
+
+  const { data: reviews_pending } = useQuery(
+    ['reviews', 'reviews.pending'],
+    () => api.reviews({ replied: false, showOnlyOwned: true }),
+    {
+      enabled: user?.role === 'OWNER',
+    },
+  );
 
   const reviewsPendingReplyCount = reviews_pending?.reviews.length ?? 0;
 
   return (
     <Layout>
-      {user?.role === 'OWNER' && (
+      {user?.role !== 'USER' && (
         <Flex align="flex-end" justify="flex-end" mb={3}>
           <RestaurantsCreateModal>
             <Button colorScheme="blue" marginLeft="auto">
@@ -47,7 +56,7 @@ const RestaurantsPage = () => {
         </Flex>
       )}
 
-      {user?.role === 'OWNER' && reviewsPendingReplyCount > 0 && (
+      {user?.role !== 'USER' && reviewsPendingReplyCount > 0 && (
         <Link to="/reviews-pending">
           <Alert status="info" variant="left-accent" mb={3}>
             <AlertIcon />

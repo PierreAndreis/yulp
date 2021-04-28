@@ -1,4 +1,4 @@
-import { Prisma, Restaurants, Role } from '@prisma/client';
+import { Prisma, Restaurants } from '@prisma/client';
 import { celebrate, Joi, Segments } from 'celebrate';
 import express from 'express';
 import createHttpError from 'http-errors';
@@ -40,12 +40,12 @@ routers.get(
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
       ratingLeast: Joi.number().min(0).max(5),
+      showOnlyOwned: Joi.boolean().default(true),
     }),
   }),
   async (req, res) => {
-    const isOwner = req.user?.role === 'OWNER';
-
     const ratingLeast = req.query.ratingLeast;
+    const showOnlyOwned = req.query.showOnlyOwned;
 
     const restaurants: Array<
       Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }
@@ -58,7 +58,7 @@ routers.get(
       FROM public."Restaurants" r
         LEFT JOIN public."Reviews" review on review.restaurant_id = r.id
       WHERE 1 = 1
-      ${isOwner ? Prisma.sql`AND owner_user_id = ${req.user?.id}` : Prisma.empty}
+      ${showOnlyOwned ? Prisma.sql`AND owner_user_id = ${req.user?.id}` : Prisma.empty}
       GROUP BY r.id
       ${
         typeof ratingLeast !== 'undefined'
@@ -74,7 +74,7 @@ routers.get(
 routers.post(
   '/restaurants',
   ensureAuthentication,
-  ensureRole(Role.OWNER),
+  ensureRole(['OWNER', 'ADMIN']),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       name: Joi.string().required().min(3),
@@ -124,12 +124,10 @@ routers.put(
 routers.delete('/restaurants/:id', ensureAuthentication, ensureRole('ADMIN'), async (req, res) => {
   const restaurantId = req.params.id;
 
-  const restaurant = await db.restaurants.delete({
-    where: {
-      id: restaurantId,
-    },
-    select: RESTAURANT_SELECT,
-  });
+  // https://github.com/prisma/prisma/issues/2328
+  const restaurant: Pick<Restaurants, 'id' | 'name' | 'owner_user_id'> = await db.$queryRaw`
+    DELETE FROM "public"."Restaurants" WHERE id = ${restaurantId} RETURNING id, name owner_user_id
+  `;
 
   if (!restaurant) {
     throw new createHttpError.NotFound('Restaurant not found.');

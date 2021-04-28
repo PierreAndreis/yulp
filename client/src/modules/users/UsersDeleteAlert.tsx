@@ -51,7 +51,8 @@ const UsersDeleteAlert = (props: Props) => {
               <Text fontWeight="600" mb={1}>
                 Are you sure? You can{"'"}t undo this action afterwards.
               </Text>
-              <Text>Everything associate to this user, including restaurants and reviews, will also be deleted.</Text>
+              <Text>If this user owns any restaurant, that will be transfered to you.</Text>
+              <Text>All reviews created by this user will be deleted.</Text>
             </AlertDialogBody>
 
             <AlertDialogFooter>

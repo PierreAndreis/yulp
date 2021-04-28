@@ -27,7 +27,7 @@ export default function Navbar() {
             >
               Restaurants
             </Button>
-            {user?.role === 'OWNER' ? (
+            {user?.role !== 'USER' ? (
               <Button
                 as={Link}
                 to={'/reviews-pending'}

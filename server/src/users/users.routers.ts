@@ -84,18 +84,27 @@ routers.delete('/users/:id', ensureAuthentication, ensureRole('ADMIN'), async (r
     throw new createHttpError.Forbidden('You are not allowed to delete yourself.');
   }
 
-  const user = await db.users.delete({
-    where: {
-      id: userId,
-    },
-    select: ADMIN_USER_SELECT,
-  });
+  const [, userCount] = await db.$transaction([
+    db.restaurants.updateMany({
+      data: {
+        owner_user_id: myUserId,
+      },
+      where: {
+        owner_user_id: userId,
+      },
+    }),
 
-  if (!user) {
+    // https://github.com/prisma/prisma/issues/2328
+    db.$executeRaw`
+    DELETE FROM "public"."Users" WHERE id = ${userId}
+  `,
+  ]);
+
+  if (userCount === 0) {
     throw new createHttpError.NotFound('User not found.');
   }
 
-  res.status(200).json(user);
+  res.status(204).end();
 });
 
 export default routers;

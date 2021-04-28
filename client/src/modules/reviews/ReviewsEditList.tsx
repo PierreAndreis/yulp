@@ -51,7 +51,7 @@ const columns: Array<Column<ThenArg<ReturnType<typeof api.reviews>>['reviews'][0
 ];
 
 const ReviewsEditList = () => {
-  const { data, status, error } = useQuery(['reviews', 'reviews.list'], () => api.reviews());
+  const { data, status, error } = useQuery(['reviews', 'reviews.list'], () => api.reviews({ showOnlyOwned: false }));
 
   if (error) {
     return <ErrorComponent message={isError(error) ? error.message : null} />;

@@ -9,7 +9,9 @@ import * as api from './../../services/api';
 import ReviewsCard from './ReviewsCard';
 
 const ReviewsPendingPage = () => {
-  const { data, error, status } = useQuery(['reviews', 'reviews.pending'], () => api.reviews({ replied: false }));
+  const { data, error, status } = useQuery(['reviews', 'reviews.pending'], () =>
+    api.reviews({ replied: false, showOnlyOwned: true }),
+  );
 
   const { user } = useAuth();
 

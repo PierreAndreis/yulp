@@ -37,7 +37,7 @@ export const REVIEW_SELECT = {
 routers.post(
   '/restaurants/:id/reviews',
   ensureAuthentication,
-  ensureRole('USER'),
+  ensureRole(['USER', 'ADMIN']),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       message: Joi.string().required().min(2),
@@ -85,6 +85,9 @@ routers.get(
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
       replied: Joi.boolean(),
+
+      // Only effective when ADMIN
+      showOnlyOwned: Joi.boolean().default(true),
     }),
   }),
   async (req, res) => {
@@ -92,9 +95,11 @@ routers.get(
     const user = req.user as NonNullable<typeof req.user>;
     const isOwner = user.role === 'OWNER';
 
+    const showOnlyOwned = req.query.showOnlyOwned;
+
     const reviews = await db.reviews.findMany({
       where: {
-        ...(isOwner
+        ...(isOwner || showOnlyOwned
           ? {
               restaurant: {
                 owner_user_id: user.id,
@@ -132,7 +137,7 @@ routers.put(
       message: Joi.string().min(2).max(255),
       rating: Joi.number().min(1).max(5),
       visit_at: Joi.date(),
-      replyMessage: Joi.string().min(1).max(255),
+      replyMessage: Joi.string().allow(null).min(1).max(255),
     }),
   }),
   async (req, res) => {
@@ -159,6 +164,12 @@ routers.put(
                     message: body.replyMessage,
                   },
                 },
+              },
+            }
+          : body.replyMessage === null
+          ? {
+              reply: {
+                delete: true,
               },
             }
           : {}),
@@ -194,7 +205,7 @@ routers.delete('/reviews/:id', ensureAuthentication, ensureRole('ADMIN'), async 
 routers.post(
   '/reviews/:id/reply',
   ensureAuthentication,
-  ensureRole('OWNER'),
+  ensureRole(['OWNER', 'ADMIN']),
   celebrate({
     [Segments.BODY]: Joi.object().keys({
       message: Joi.string().required().min(2),
@@ -291,6 +302,12 @@ routers.delete('/reviews/:id/reply', ensureAuthentication, ensureRole('ADMIN'), 
       },
     },
     select: REVIEW_SELECT,
+  });
+
+  await db.reviews.delete({
+    where: {
+      id: reviewId,
+    },
   });
 
   if (!review) {

@@ -26,7 +26,11 @@ export function isError<T>(response: T | ErrorMessage): response is ErrorMessage
 }
 
 export const parse = async (response: Response) => {
-  const body = await response.json();
+  if (response.status === 204) {
+    return true;
+  }
+
+  const body = response.json();
 
   if (response.status === 401) {
     useTokenStorage.getState().setToken(null);

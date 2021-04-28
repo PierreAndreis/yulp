@@ -5,14 +5,20 @@
   "author": "Pierre Ortega <pierreandreisortega@gmail.com>",
   "license": "MIT",
   "private": true,
+  "engines": {
+    "yarn": "1.x"
+  },
   "workspaces": [
     "client",
     "server"
   ],
   "scripts": {
+    "build": "lerna run build --parallel --stream",
     "dev": "lerna run dev --parallel --stream",
-    "build": "learn run build --parallel --stream",
-    "start": "lerna run start --parallel --stream"
+    "db:deploy": "lerna run db:deploy --parallel --stream",
+    "db:seed": "lerna run db:seed --parallel --stream",
+    "start": "lerna run start --parallel --stream",
+    "serve": "lerna run serve --parallel --stream"
   },
   "devDependencies": {
     "@types/node": "^14.14.41",

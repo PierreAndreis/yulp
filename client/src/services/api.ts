@@ -67,6 +67,7 @@ type RestaurantsResponse = {
 
 type RestaurantsQueries = {
   ratingLeast?: number;
+  showOnlyOwned?: boolean;
 };
 
 export async function restaurants(params?: RestaurantsQueries): Promise<RestaurantsResponse> {
@@ -99,6 +100,7 @@ type ReviewsResponse = {
 
 type ReviewsListParams = {
   replied?: boolean;
+  showOnlyOwned?: boolean;
 };
 
 export async function reviews(params?: ReviewsListParams): Promise<ReviewsResponse> {
@@ -151,7 +153,7 @@ export async function editUser(userId: string, data: UserEditData): Promise<User
   }).then(parse);
 }
 
-export async function deleteUser(userId: string): Promise<User> {
+export async function deleteUser(userId: string): Promise<boolean> {
   return authorizedRequest(`${BASE_URL}/users/${userId}`, {
     method: 'DELETE',
   }).then(parse);
@@ -176,7 +178,7 @@ export async function deleteRestaurant(restaurantId: string): Promise<Pick<Resta
 }
 
 type ReviewEditData = Partial<ReviewCreateData> & {
-  replyMessage?: string;
+  replyMessage?: null | string;
 };
 
 export async function editReview(reviewId: string, data: ReviewEditData): Promise<Review> {

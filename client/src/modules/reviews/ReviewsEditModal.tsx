@@ -4,6 +4,7 @@ import {
   Button,
   ButtonGroup,
   FormControl,
+  FormHelperText,
   FormLabel,
   Input,
   Modal,
@@ -34,7 +35,7 @@ const ReviewsEditModal = (props: Props) => {
   const [rating, setRating] = useState<number>(0);
   const [visit_at, setVisitAt] = useState<string>('');
   const [message, setMessage] = useState('');
-  const [replyMessage, setReplyMessage] = useState<string | undefined>(void 0);
+  const [replyMessage, setReplyMessage] = useState<string | null>(null);
 
   const review = props.review;
   const lastOpenedReviewId = useRef<string | null>(null);
@@ -44,7 +45,7 @@ const ReviewsEditModal = (props: Props) => {
       setRating(review.rating);
       setVisitAt(review.visit_at.split('T')[0]);
       setMessage(review.message);
-      setReplyMessage(review.reply?.message);
+      setReplyMessage(review.reply?.message ?? null);
     }
   }, [isOpen, review]);
 
@@ -53,7 +54,7 @@ const ReviewsEditModal = (props: Props) => {
     setRating(0);
     setVisitAt('');
     setMessage('');
-    setReplyMessage(void 0);
+    setReplyMessage(null);
     onCloseModal();
   }
 
@@ -97,7 +98,8 @@ const ReviewsEditModal = (props: Props) => {
                 </FormControl>
                 <FormControl id="message">
                   <FormLabel>Reply Message</FormLabel>
-                  <Textarea onChange={(e) => setReplyMessage(e.target.value)} value={replyMessage} />
+                  <Textarea onChange={(e) => setReplyMessage(e.target.value || null)} value={replyMessage ?? ''} />
+                  <FormHelperText>Leave blank to delete the reply.</FormHelperText>
                 </FormControl>
               </Stack>
             </ModalBody>
