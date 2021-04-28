@@ -2,7 +2,7 @@
 
 A full stack restaurant review application built using modern web practices.
 
-[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Restaurant%20Review%20API&uri=https%3A%2F%2Fgit.toptal.com%2Fscreening%2FPierre-Ortega%2F-%2Fblob%2Fmain%2Finsomnia-schema.json)
+[![Run in Insomnia}](https://insomnia.rest/images/run.svg)](https://insomnia.rest/run/?label=Yulp%20API&uri=https%3A%2F%2Fgithub.com%2FPierreAndreis%2Fyulp%2Fblob%2Fmain%2Finsomnia-schema.json)
 
 ## Features
 
