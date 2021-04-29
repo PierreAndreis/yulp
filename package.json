@@ -25,12 +25,17 @@
     "dev": "lerna run dev --parallel --stream",
     "start": "lerna run start --parallel --stream",
     "serve": "lerna run serve --parallel --stream",
-    "docs": "insomnia-documenter -c insomnia-schema.json -o docs && serve -l 9999 docs -s"
+    "docs": "insomnia-documenter -c insomnia-schema.json -o docs && serve -l 9999 docs -s",
+    "test": "dotenv -- jest"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.23",
     "@types/node": "^14.14.41",
+    "@types/pg": "^7.14.11",
     "@typescript-eslint/eslint-plugin": "^4.22.0",
     "@typescript-eslint/parser": "^4.22.0",
+    "dotenv": "^8.2.0",
+    "dotenv-cli": "^4.0.0",
     "eslint": "^7.25.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.3.0",
@@ -40,9 +45,18 @@
     "eslint-plugin-react": "^7.23.2",
     "eslint-plugin-react-hooks": "^4.2.0",
     "insomnia-documenter": "^0.4.4",
+    "jest": "^26.6.3",
+    "jest-environment-node": "^26.6.2",
     "lerna": "^4.0.0",
+    "nanoid": "^3.1.22",
+    "pg": "^8.6.0",
     "prettier": "^2.2.1",
     "serve": "^11.3.2",
+    "ts-jest": "^26.5.5",
     "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "@prisma/client": "^2.21.2",
+    "prisma": "^2.21.2"
   }
 }

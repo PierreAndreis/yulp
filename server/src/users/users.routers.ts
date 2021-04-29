@@ -46,7 +46,7 @@ routers.put(
     const myUserId = req.user?.id;
     const userId = req.params.id;
 
-    if (myUserId && userId && body.role !== Role.ADMIN) {
+    if (myUserId == userId && body.role !== Role.ADMIN) {
       throw new createHttpError.Forbidden('You are not allowed to change your own role out of admin.');
     }
 
@@ -96,7 +96,7 @@ routers.delete('/users/:id', ensureAuthentication, ensureRole('ADMIN'), async (r
 
     // https://github.com/prisma/prisma/issues/2328
     db.$executeRaw`
-    DELETE FROM "public"."Users" WHERE id = ${userId}
+    DELETE FROM "Users" WHERE id = ${userId}
   `,
   ]);
 

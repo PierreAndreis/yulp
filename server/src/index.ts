@@ -1,3 +1,8 @@
+/* eslint-disable import/first */
+import { config } from 'dotenv';
+config({
+  path: '../.env',
+});
 import app from './app';
 const PORT = process.env.PORT || 1234;
 

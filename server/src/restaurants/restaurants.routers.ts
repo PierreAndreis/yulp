@@ -40,12 +40,14 @@ routers.get(
   celebrate({
     [Segments.QUERY]: Joi.object().keys({
       ratingLeast: Joi.number().min(0).max(5),
-      showOnlyOwned: Joi.boolean().default(true),
+      showOnlyOwned: Joi.boolean().default(false),
     }),
   }),
   async (req, res) => {
+    const userRole = req.user?.role;
     const ratingLeast = req.query.ratingLeast;
-    const showOnlyOwned = req.query.showOnlyOwned;
+
+    const showOnlyOwned = userRole === 'OWNER' ? true : req.query.showOnlyOwned;
 
     const restaurants: Array<
       Pick<Restaurants, 'id' | 'name'> & { reviews_rating_avg: number; reviews_rating_count: number }
@@ -55,8 +57,8 @@ routers.get(
       r.name as name, 
       COALESCE(AVG(review.rating), 0) as reviews_rating_avg,
       COALESCE(COUNT(review.id), 0) as reviews_rating_count
-      FROM public."Restaurants" r
-        LEFT JOIN public."Reviews" review on review.restaurant_id = r.id
+      FROM "Restaurants" r
+        LEFT JOIN "Reviews" review on review.restaurant_id = r.id
       WHERE 1 = 1
       ${showOnlyOwned ? Prisma.sql`AND owner_user_id = ${req.user?.id}` : Prisma.empty}
       GROUP BY r.id
@@ -129,7 +131,7 @@ routers.delete('/restaurants/:id', ensureAuthentication, ensureRole('ADMIN'), as
 
   // https://github.com/prisma/prisma/issues/2328
   const restaurant: Array<Pick<Restaurants, 'id' | 'name' | 'owner_user_id'>> = await db.$queryRaw`
-    DELETE FROM "public"."Restaurants" WHERE id = ${restaurantId} RETURNING id, name owner_user_id
+    DELETE FROM "Restaurants" WHERE id = ${restaurantId} RETURNING id, name owner_user_id
   `;
 
   if (restaurant.length < 1) {

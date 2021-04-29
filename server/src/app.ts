@@ -1,8 +1,4 @@
 /* eslint-disable import/first */
-import { config } from 'dotenv';
-config({
-  path: '../.env',
-});
 require('express-async-errors');
 
 import { errors } from 'celebrate';

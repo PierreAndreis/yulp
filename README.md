@@ -72,6 +72,7 @@ To run the server application, `yarn start` will start in production mode after 
 `docs` Start a documentation app for the API on port 9999<br />
 `serve` Start a local server to serve the static assets generated from the client build<br />
 `dev` Run both client and server locally, watching changes and reloading<br />
+`test` Run all test suites
 
 ## Database Scripts
 

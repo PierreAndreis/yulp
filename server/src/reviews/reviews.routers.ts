@@ -131,7 +131,7 @@ routers.post(
       select: REVIEW_SELECT,
     });
 
-    res.status(200).json(review);
+    res.status(201).json(review);
   },
 );
 
@@ -206,7 +206,7 @@ routers.delete('/reviews/:id', ensureAuthentication, ensureRole('ADMIN'), async 
 
   // https://github.com/prisma/prisma/issues/2328
   const count = await db.$executeRaw`
-    DELETE FROM "public"."Reviews" WHERE id = ${reviewId}
+    DELETE FROM "Reviews" WHERE id = ${reviewId}
   `;
 
   if (count < 1) {
@@ -264,7 +264,7 @@ routers.post(
       select: REVIEW_SELECT,
     });
 
-    res.status(200).json(updatedReview);
+    res.status(201).json(updatedReview);
   },
 );
 
