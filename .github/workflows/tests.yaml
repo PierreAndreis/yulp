@@ -25,6 +25,8 @@ jobs:
           - 5432:5432
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/defaultdb
+      JWT_SECRET: test
+      SERVER_PORT: 1234
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
