@@ -5800,10 +5800,10 @@ inquirer@^7.3.3:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-insomnia-documenter@0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.4.4.tgz#f90fd210d23bf4d69e26c31098fa0f1e3841119c"
-  integrity sha512-tMfX0zQgNihx4kbWQIjfk+dbYr+M3YUkkoE9URginTkd0rzveBGEkaC2Qjze2azQYUPBxY1cvya6JBphlLRVEw==
+insomnia-documenter@0.5.2:
+  version "0.5.2"
+  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.5.2.tgz#7675bd2abe2757b43e8735b381956b5dd31f91b4"
+  integrity sha512-m16Rqxg+9SyaRq5H6LgdW8xC8Ru3Y4VgzB+TYwzzYWUMmjMFP55CXmStkKqQL/HY5y060v1jLddc5/Ehu5EFBQ==
   dependencies:
     commander "^3.0.1"
     copy-dir "^1.2.0"
