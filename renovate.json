@@ -1,5 +1,139 @@
 {
   "extends": [
-    "config:base"
+    ":separateMajorReleases",
+    ":combinePatchMinorReleases",
+    ":ignoreUnstable",
+    ":prNotPending",
+    ":renovatePrefix",
+    ":updateNotScheduled",
+    ":ignoreModulesAndTests",
+    ":maintainLockFilesDisabled",
+    ":autodetectPinVersions",
+    ":prConcurrentLimit20",
+    "group:monorepos",
+    "group:recommended",
+    "helpers:disableTypesNodeMajor",
+    "helpers:oddIsUnstablePackages",
+    ":automergeDigest",
+    ":automergePatch",
+    ":pinAllExceptPeerDependencies",
+    ":semanticPrefixFixDepsChoreOthers",
+    "docker:enableMajor"
+  ],
+  "assignees": [
+    "PierreAndreis"
+  ],
+  "assigneesSampleSize": 1,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "semanticCommits": true,
+  "prBodyColumns": [
+    "Package",
+    "Update",
+    "Type",
+    "Change",
+    "Package file",
+    "References"
+  ],
+  "unicodeEmoji": true,
+  "labels": [
+    "dependency-update"
+  ],
+  "patch": {
+    "labels": [
+      "patch",
+      "automerge",
+      "dependency-update"
+    ]
+  },
+  "minor": {
+    "labels": [
+      "minor",
+      "dependency-update"
+    ]
+  },
+  "major": {
+    "labels": [
+      "major",
+      "dependency-update"
+    ]
+  },
+  "digest": {
+    "labels": [
+      "digest",
+      "automerge",
+      "dependency-update"
+    ]
+  },
+  "packageRules": [
+    {
+      "matchPackagePatterns": "^@chakra-ui",
+      "groupName": [
+        "chakra-ui"
+      ],
+      "prPriority": 5,
+      "labels": [
+        "chakra-ui",
+        "dependency-update"
+      ],
+      "automerge": false
+    },
+    {
+      "matchPackagePatterns": "^@visx",
+      "groupName": [
+        "visx"
+      ],
+      "prPriority": 1,
+      "labels": [
+        "visx",
+        "dependency-update"
+      ],
+      "automerge": true
+    },
+    {
+      "matchDepTypes": [
+        "devDependencies"
+      ],
+      "automerge": true,
+      "prPriority": -1,
+      "labels": [
+        "automerge",
+        "dependency-update",
+        "dev-dependency"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
+      "automerge": true,
+      "labels": [
+        "automerge",
+        "not-major",
+        "dependency-update"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false,
+      "labels": [
+        "major",
+        "dependency-update"
+      ]
+    },
+    {
+      "matchPackageNames": [
+        "framer-motion"
+      ],
+      "enabled": false
+    }
+  ],
+  "postUpdateOptions": [
+    "yarnDedupeHighest"
   ]
 }
