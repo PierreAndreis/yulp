@@ -43,8 +43,7 @@ class PrismaTestEnvironment extends NodeEnvironment {
     const out = await exec(`${prismaBinary} migrate deploy`);
 
     if (out.stderr) {
-      console.warn(out);
-      throw new Error('Error while running migrate deploy on test enviromment setup');
+      console.warn(out.stderr);
     }
 
     return super.setup();
