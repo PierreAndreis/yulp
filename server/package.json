@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@prisma/client": "2.26.0",
-    "@types/http-errors": "1.8.0",
+    "@types/http-errors": "1.8.1",
     "@types/jsonwebtoken": "8.5.3",
     "bcryptjs": "2.4.3",
     "celebrate": "14.0.0",
