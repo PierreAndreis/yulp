@@ -44,7 +44,7 @@
     "eslint-plugin-prettier": "3.4.0",
     "eslint-plugin-react": "7.24.0",
     "eslint-plugin-react-hooks": "4.2.0",
-    "insomnia-documenter": "0.5.2",
+    "insomnia-documenter": "0.5.3",
     "jest": "27.0.6",
     "jest-environment-node": "27.0.6",
     "lerna": "4.0.0",

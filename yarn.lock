@@ -5578,10 +5578,10 @@ inquirer@^7.3.3:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-insomnia-documenter@0.5.2:
-  version "0.5.2"
-  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.5.2.tgz#7675bd2abe2757b43e8735b381956b5dd31f91b4"
-  integrity sha512-m16Rqxg+9SyaRq5H6LgdW8xC8Ru3Y4VgzB+TYwzzYWUMmjMFP55CXmStkKqQL/HY5y060v1jLddc5/Ehu5EFBQ==
+insomnia-documenter@0.5.3:
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.5.3.tgz#cfb441a81ee79a2a76429b97fb336c279b9165aa"
+  integrity sha512-WOJeJZ7jyB/4Z/HmAQhPK6AzqPWOlHCOl4YLcOaxTwSGhJ2fsEXc+h6Smg7UqbkPcriQc9XC3W/nl7xrq+tdUA==
   dependencies:
     commander "^3.0.1"
     copy-dir "^1.2.0"
@@ -7225,10 +7225,10 @@ node-releases@^1.1.71:
   resolved "https://registry.yarnpkg.com/node-releases/-/node-releases-1.1.71.tgz#cb1334b179896b1c89ecfdd4b725fb7bbdfc7dbb"
   integrity sha512-zR6HoT6LrLCRBwukmrVbHv0EpEQjksO6GmFcZQQuCAy139BEsoVKPYnf3jongYW83fAa1torLGYwxxky/p28sg==
 
-nodemon@2.0.10:
-  version "2.0.10"
-  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.10.tgz#abda912860e5c1158ce0e1f13e0fe43b36b0ccb3"
-  integrity sha512-369KB2EC1fLzz7hIuKSRSIVhh9PXqFAwh1stxlNX8DMyat9y/maswuRxRMttyelnduLDa04r4wgVZ4fgRwZWuQ==
+nodemon@2.0.12:
+  version "2.0.12"
+  resolved "https://registry.yarnpkg.com/nodemon/-/nodemon-2.0.12.tgz#5dae4e162b617b91f1873b3bfea215dd71e144d5"
+  integrity sha512-egCTmNZdObdBxUBw6ZNwvZ/xzk24CKRs5K6d+5zbmrMr7rOpPmfPeF6OxM3DDpaRx331CQRFEktn+wrFFfBSOA==
   dependencies:
     chokidar "^3.2.2"
     debug "^3.2.6"
@@ -9692,10 +9692,10 @@ ts-node-dev@1.1.8:
     ts-node "^9.0.0"
     tsconfig "^7.0.0"
 
-ts-node@10.0.0:
-  version "10.0.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.0.0.tgz#05f10b9a716b0b624129ad44f0ea05dac84ba3be"
-  integrity sha512-ROWeOIUvfFbPZkoDis0L/55Fk+6gFQNZwwKPLinacRl6tsxstTF1DbAcLKkovwnpKMVvOMHP1TIbnwXwtLg1gg==
+ts-node@10.1.0:
+  version "10.1.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.1.0.tgz#e656d8ad3b61106938a867f69c39a8ba6efc966e"
+  integrity sha512-6szn3+J9WyG2hE+5W8e0ruZrzyk1uFLYye6IGMBadnOzDh8aP7t8CbFpsfCiEx2+wMixAhjFt7lOZC4+l+WbEA==
   dependencies:
     "@tsconfig/node10" "^1.0.7"
     "@tsconfig/node12" "^1.0.7"
