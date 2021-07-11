@@ -3345,10 +3345,10 @@ caseless@~0.12.0:
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
   integrity sha1-G2gcIf+EAzyCZUMJBolCDRhxUdw=
 
-celebrate@14.0.0:
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/celebrate/-/celebrate-14.0.0.tgz#c4e5464049314fc5e90cb67b7fc7cea7be5898c9"
-  integrity sha512-TqbsEkppmR3st1XFAatlfrWM2q0peZpaXDr0qAs4mXZ8yHtjwYYUgSl4/pluL+hlljbdC9OAJVkL5U3dFpSwxw==
+celebrate@15.0.0:
+  version "15.0.0"
+  resolved "https://registry.yarnpkg.com/celebrate/-/celebrate-15.0.0.tgz#2651237146ea03600d0d1244478782c06270d243"
+  integrity sha512-eGA5CHv5GYbV6ZaBEYKIST+7OUsHZKcyiNdagdVDu6uO1QK2i2qLrS9XWdJ1pWPuw9M0D7B1rUFQqIld1nNcMA==
   dependencies:
     escape-html "1.0.3"
     joi "17.x.x"
@@ -5578,10 +5578,10 @@ inquirer@^7.3.3:
     strip-ansi "^6.0.0"
     through "^2.3.6"
 
-insomnia-documenter@0.5.3:
-  version "0.5.3"
-  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.5.3.tgz#cfb441a81ee79a2a76429b97fb336c279b9165aa"
-  integrity sha512-WOJeJZ7jyB/4Z/HmAQhPK6AzqPWOlHCOl4YLcOaxTwSGhJ2fsEXc+h6Smg7UqbkPcriQc9XC3W/nl7xrq+tdUA==
+insomnia-documenter@0.5.4:
+  version "0.5.4"
+  resolved "https://registry.yarnpkg.com/insomnia-documenter/-/insomnia-documenter-0.5.4.tgz#6d5ef84ba6dc1c6a7b6ea85d4193147753bb1d2e"
+  integrity sha512-Xl9o7c6UXkDi9wlPLoTv0qn19713EwkPJf1bD2sPxuRJqSZcfwzPDcx+0OHGVqgKudjLbyuehpTDsUK1BPHSDQ==
   dependencies:
     commander "^3.0.1"
     copy-dir "^1.2.0"
