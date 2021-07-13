@@ -10,7 +10,7 @@
     "start": "cross-env NODE_ENV=production node dist/index.js"
   },
   "dependencies": {
-    "@prisma/client": "2.26.0",
+    "@prisma/client": "2.27.0",
     "@types/http-errors": "1.8.1",
     "@types/jsonwebtoken": "8.5.4",
     "bcryptjs": "2.4.3",
@@ -23,7 +23,7 @@
     "jose": "1.28.1",
     "morgan": "1.10.0",
     "nodemon": "2.0.12",
-    "prisma": "2.26.0"
+    "prisma": "2.27.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.2",
